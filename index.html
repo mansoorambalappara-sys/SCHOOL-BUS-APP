@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Bus App - GLPS MUNDEKARAD</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Outfit & Inter for ultra-premium look -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- html2pdf for A4 PDF receipts and reports -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .brand-title { font-family: 'Outfit', sans-serif; }
+        .btn-3d {
+            transition: all 0.15s ease;
+            box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+        }
+        .btn-3d:active {
+            transform: translateY(3px);
+            box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <header class="bg-gradient-to-r from-indigo-950 via-indigo-900 to-blue-950 text-white shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
+            <i class="fa-solid fa-bus"></i>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center justify-center text-center relative z-10">
+            <div id="user-status" class="hidden absolute top-4 right-4 flex items-center space-x-3 bg-indigo-900/80 backdrop-blur px-4 py-2 rounded-2xl text-xs border border-indigo-500/30 shadow-lg">
+                <span id="logged-in-user-name" class="font-semibold"></span>
+                <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-xl text-xs transition shadow font-medium">Logout</button>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-md text-white p-4 rounded-3xl shadow-inner mb-3 border border-white/20">
+                <i class="fa-solid fa-bus text-4xl animate-pulse"></i>
+            </div>
+            <div>
+                <h1 class="brand-title text-3xl sm:text-5xl font-black tracking-wider uppercase bg-gradient-to-r from-white via-indigo-100 to-indigo-300 bg-clip-text text-transparent drop-shadow-md">School Bus App</h1>
+                <p class="text-xs sm:text-sm text-indigo-200 mt-2 font-bold tracking-widest uppercase bg-indigo-950/60 px-5 py-2 rounded-full inline-block border border-indigo-500/30">Run by GLPS MUNDEKARAD</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6">
+        
+        <!-- Login Container -->
+        <div id="auth-container" class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 my-8">
+            <div class="bg-gradient-to-br from-indigo-600 to-blue-700 p-6 text-white text-center">
+                <h2 class="brand-title text-2xl font-bold">Portal Login</h2>
+                <p class="text-xs text-indigo-100 mt-1">Select your access role below</p>
+            </div>
+            
+            <div class="p-6">
+                <div class="flex rounded-2xl bg-slate-100 p-1 mb-6 text-xs font-semibold">
+                    <button onclick="switchTab('admin')" id="tab-admin" class="flex-1 py-3 rounded-xl bg-white text-indigo-700 shadow-sm transition">Admin</button>
+                    <button onclick="switchTab('teacher')" id="tab-teacher" class="flex-1 py-3 rounded-xl text-slate-500 hover:text-slate-800 transition">Teacher</button>
+                    <button onclick="switchTab('parent')" id="tab-parent" class="flex-1 py-3 rounded-xl text-slate-500 hover:text-slate-800 transition">Parent</button>
+                </div>
+
+                <div id="login-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl"></div>
+
+                <!-- Admin Form -->
+                <form id="form-admin" onsubmit="handleAdminLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Username</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-user"></i></span>
+                            <input type="text" id="admin-user" required placeholder="Enter username" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" id="admin-pass" required placeholder="Enter password" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-indigo-200 transition duration-200">Login as Admin</button>
+                </form>
+
+                <!-- Teacher Form -->
+                <form id="form-teacher" onsubmit="handleTeacherLogin(event)" class="space-y-4 hidden">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Select Class Teacher</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-chalkboard-user"></i></span>
+                            <select id="teacher-select" required class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                                <option value="">-- Choose Class --</option>
+                                <option value="LKG">LKG Teacher</option>
+                                <option value="UKG">UKG Teacher</option>
+                                <option value="STANDARD-1">STANDARD-1 Teacher</option>
+                                <option value="STANDARD-2">STANDARD-2 Teacher</option>
+                                <option value="STANDARD-3">STANDARD-3 Teacher</option>
+                                <option value="STANDARD-4">STANDARD-4 Teacher</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Teacher Username</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-user-shield"></i></span>
+                            <input type="text" id="teacher-user" required placeholder="Enter username" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" id="teacher-pass" required placeholder="Enter password" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-indigo-200 transition duration-200">Login as Class Teacher</button>
+                </form>
+
+                <!-- Parent Form -->
+                <div id="form-parent" class="space-y-4 hidden">
+                    <div id="parent-login-box">
+                        <form onsubmit="handleParentLogin(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Parent Username</label>
+                                <input type="text" id="parent-user-input" required placeholder="Enter username" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Password</label>
+                                <input type="password" id="parent-pass-input" required placeholder="Enter password" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                            </div>
+                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-indigo-200 transition duration-200">Login as Parent</button>
+                        </form>
+                        <div class="mt-4 text-center border-t pt-4">
+                            <p class="text-xs text-slate-500">Don't have a parent account yet?</p>
+                            <button type="button" onclick="toggleParentAuthMode('signup')" class="text-xs font-bold text-indigo-600 hover:underline mt-1">Sign Up Now (Free & Easy)</button>
+                        </div>
+                    </div>
+
+                    <div id="parent-signup-box" class="hidden">
+                        <form onsubmit="handleParentSignup(event)" class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Parent Name</label>
+                                <input type="text" id="signup-parent-name" required placeholder="Your Full Name" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Student Name</label>
+                                <input type="text" id="signup-student-name" required placeholder="Child's Name" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Class / Standard</label>
+                                <select id="signup-student-class" required class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                                    <option value="LKG">LKG</option>
+                                    <option value="UKG">UKG</option>
+                                    <option value="STANDARD-1">STANDARD-1</option>
+                                    <option value="STANDARD-2">STANDARD-2</option>
+                                    <option value="STANDARD-3">STANDARD-3</option>
+                                    <option value="STANDARD-4">STANDARD-4</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">WhatsApp Mobile Number</label>
+                                <input type="tel" id="signup-phone" required placeholder="10-digit mobile number" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Choose Username</label>
+                                <input type="text" id="signup-username" required placeholder="Create username" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Choose Password</label>
+                                <input type="password" id="signup-password" required placeholder="Create password" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                            </div>
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-emerald-200 transition duration-200 text-sm">Register & Login</button>
+                        </form>
+                        <div class="mt-3 text-center border-t pt-2">
+                            <button type="button" onclick="toggleParentAuthMode('login')" class="text-xs font-bold text-indigo-600 hover:underline">Already registered? Back to Login</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin & Teacher Dashboard -->
+        <div id="admin-dashboard" class="hidden space-y-8">
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 text-center">
+                <h2 id="dashboard-title" class="brand-title text-2xl font-extrabold text-slate-800">Control Center</h2>
+                <p class="text-sm text-slate-500 mt-1">GLPS MUNDEKARAD School Bus Operations & Financials</p>
+            </div>
+
+            <!-- 3 Main 3D Buttons Grid (or 2 for teacher) -->
+            <div id="admin-buttons-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto py-4">
+                
+                <!-- Button 1: Bus Fee Management -->
+                <button onclick="openBusFeeModal()" class="btn-3d bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-8 rounded-3xl flex flex-col items-center justify-center space-y-4 border-b-8 border-teal-900 group hover:scale-[1.02]">
+                    <div class="bg-white/20 p-4 rounded-2xl group-hover:bg-white/30 transition">
+                        <i class="fa-solid fa-indian-rupee-sign text-4xl"></i>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="brand-title text-xl font-bold tracking-wide">Bus Fee Management</h3>
+                        <p class="text-xs text-emerald-100 mt-1 font-medium">Collect fees, directory & WhatsApp receipt</p>
+                    </div>
+                </button>
+
+                <!-- Button 2: Bus Expense Management -->
+                <button id="btn-expense" onclick="openBusExpenseModal()" class="btn-3d bg-gradient-to-br from-amber-500 to-orange-700 text-white p-8 rounded-3xl flex flex-col items-center justify-center space-y-4 border-b-8 border-orange-900 group hover:scale-[1.02]">
+                    <div class="bg-white/20 p-4 rounded-2xl group-hover:bg-white/30 transition">
+                        <i class="fa-solid fa-file-invoice-dollar text-4xl"></i>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="brand-title text-xl font-bold tracking-wide">Bus Expense Management</h3>
+                        <p class="text-xs text-amber-100 mt-1 font-medium">Salary, diesel, service & other expenses</p>
+                    </div>
+                </button>
+
+                <!-- Button 3: Monthly Report / Class Report -->
+                <button id="btn-report" onclick="openMonthlyReportModal()" class="btn-3d bg-gradient-to-br from-indigo-600 to-purple-800 text-white p-8 rounded-3xl flex flex-col items-center justify-center space-y-4 border-b-8 border-purple-950 group hover:scale-[1.02]">
+                    <div class="bg-white/20 p-4 rounded-2xl group-hover:bg-white/30 transition">
+                        <i class="fa-solid fa-chart-pie text-4xl"></i>
+                    </div>
+                    <div class="text-center">
+                        <h3 id="btn-report-title" class="brand-title text-xl font-bold tracking-wide">Monthly Report</h3>
+                        <p id="btn-report-desc" class="text-xs text-indigo-100 mt-1 font-medium">View collections, dues, salary & expense summary</p>
+                    </div>
+                </button>
+
+            </div>
+        </div>
+
+        <!-- Parent Dashboard -->
+        <div id="parent-dashboard" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="brand-title text-xl font-bold text-slate-800">Parent Dashboard - Bus Fee Status</h2>
+                    <p class="text-sm text-slate-500">GLPS MUNDEKARAD Bus Service</p>
+                </div>
+                <div class="bg-indigo-50 text-indigo-700 px-4 py-2.5 rounded-2xl text-sm font-medium border border-indigo-100">
+                    Student: <span id="parent-welcome-name" class="font-bold"></span> (<span id="parent-welcome-class"></span>)
+                </div>
+            </div>
+
+            <div class="max-w-md mx-auto py-4">
+                <button onclick="downloadParentPDFReport()" class="btn-3d w-full bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-6 rounded-3xl flex flex-col items-center justify-center space-y-3 border-b-8 border-teal-900 group hover:scale-[1.02]">
+                    <div class="bg-white/20 p-3 rounded-2xl group-hover:bg-white/30 transition">
+                        <i class="fa-solid fa-file-pdf text-3xl"></i>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="brand-title text-lg font-bold tracking-wide">Download Bus Fee Statement (PDF)</h3>
+                        <p class="text-xs text-emerald-100 mt-0.5 font-medium">View and download complete fee statement</p>
+                    </div>
+                </button>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
+                <h3 class="brand-title font-bold text-slate-800 mb-2">Detailed Monthly Fee Status</h3>
+                <div class="space-y-3" id="parent-fee-status-container">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bus Fee Management Modal -->
+    <div id="bus-fee-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-5xl w-full p-6 shadow-2xl border border-slate-100 space-y-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="brand-title text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-indian-rupee-sign text-teal-600"></i> Bus Fee Management & Student Directory</h3>
+                <button onclick="closeBusFeeModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+
+            <!-- Fee Collection Form Inside Modal -->
+            <form onsubmit="handleFeePayment(event)" class="space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                <div class="flex justify-between items-center">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Collect Bus Fee For Student</h4>
+                    <button type="button" onclick="openAddStudentModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-3 py-1.5 rounded-xl shadow transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-plus"></i><span>Add New Student</span>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Select Class</label>
+                        <select id="fee-class-select" onchange="updateStudentsDropdown()" required class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium">
+                            <option value="">-- Choose Class --</option>
+                            <option value="LKG">LKG</option>
+                            <option value="UKG">UKG</option>
+                            <option value="STANDARD-1">STANDARD-1</option>
+                            <option value="STANDARD-2">STANDARD-2</option>
+                            <option value="STANDARD-3">STANDARD-3</option>
+                            <option value="STANDARD-4">STANDARD-4</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Select Student</label>
+                        <select id="fee-student-select" onchange="fillStudentPhone()" required class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium">
+                            <option value="">-- Choose Student --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Parent WhatsApp Phone</label>
+                        <input type="tel" id="fee-parent-phone" required placeholder="10 digit mobile number" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Payment Date</label>
+                        <input type="date" id="fee-payment-date" required class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Select Months to Pay (June-Aug pre-paid & locked, Sep onwards due)</label>
+                    <div id="months-checkboxes" class="grid grid-cols-3 sm:grid-cols-5 gap-2 text-xs">
+                        <!-- Populated -->
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Monthly Fee Amount (₹)</label>
+                        <input type="number" id="fee-per-month" value="350" required class="w-32 px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium">
+                    </div>
+                    <button type="submit" class="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white font-semibold px-6 py-3 rounded-xl text-sm shadow-md transition">
+                        <i class="fa-solid fa-receipt mr-1"></i> Record Payment & WhatsApp Receipt
+                    </button>
+                </div>
+            </form>
+
+            <!-- Toggle Directory Button -->
+            <div class="text-center pt-2">
+                <button type="button" onclick="toggleStudentDirectoryView()" id="toggle-directory-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-5 py-2.5 rounded-2xl text-xs transition">
+                    <i class="fa-solid fa-eye mr-1"></i> Show Directory & Fee Status
+                </button>
+            </div>
+
+            <!-- Student Directory & Fee Status Table (Hidden by default) -->
+            <div id="student-directory-section" class="hidden bg-white rounded-2xl border border-slate-100 overflow-hidden mt-4">
+                <div class="p-4 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-50">
+                    <div class="flex items-center space-x-3">
+                        <div>
+                            <h3 class="brand-title font-bold text-slate-800 text-sm">Student Directory & Fee Status</h3>
+                            <p class="text-xs text-slate-400">Total Filtered Students: <span id="stat-total-students" class="font-bold text-indigo-600">0</span></p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 w-full sm:w-auto items-center">
+                        <select id="filter-class" onchange="renderStudentsTable()" class="bg-white border border-slate-200 text-xs rounded-xl px-3 py-2 font-medium">
+                            <option value="">All Classes</option>
+                            <option value="LKG">LKG</option>
+                            <option value="UKG">UKG</option>
+                            <option value="STANDARD-1">STANDARD-1</option>
+                            <option value="STANDARD-2">STANDARD-2</option>
+                            <option value="STANDARD-3">STANDARD-3</option>
+                            <option value="STANDARD-4">STANDARD-4</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="student-directory-container" class="overflow-x-auto max-h-72">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead class="sticky top-0 bg-slate-100">
+                            <tr class="text-slate-500 text-xs uppercase tracking-wider">
+                                <th class="p-3 font-semibold">Name</th>
+                                <th class="p-3 font-semibold">Class</th>
+                                <th class="p-3 font-semibold">Phone</th>
+                                <th class="p-3 font-semibold">Paid Months</th>
+                                <th class="p-3 font-semibold">Status / Dues</th>
+                                <th class="p-3 font-semibold text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-students-table" class="divide-y divide-slate-100">
+                            <!-- Populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button onclick="closeBusFeeModal()" class="px-5 py-2.5 rounded-xl bg-slate-800 text-white text-sm font-medium hover:bg-slate-900">Close Window</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div id="add-student-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 id="student-modal-title" class="brand-title text-lg font-bold text-slate-800">Add New Student</h3>
+                <button onclick="closeAddStudentModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleSaveStudent(event)" class="space-y-4">
+                <input type="hidden" id="edit-student-id">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Student Name</label>
+                    <input type="text" id="new-name" required placeholder="e.g. Rahul Kumar" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Class</label>
+                    <select id="new-class" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                        <option value="LKG">LKG</option>
+                        <option value="UKG">UKG</option>
+                        <option value="STANDARD-1">STANDARD-1</option>
+                        <option value="STANDARD-2">STANDARD-2</option>
+                        <option value="STANDARD-3">STANDARD-3</option>
+                        <option value="STANDARD-4">STANDARD-4</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Parent WhatsApp Phone Number</label>
+                    <input type="tel" id="new-phone" required placeholder="9876543210" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeAddStudentModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-50">Cancel</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 shadow">Save Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bus Expense Modal -->
+    <div id="bus-expense-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center">
+                <h3 id="expense-modal-title" class="brand-title text-lg font-bold text-slate-800 flex items-center gap-2 text-orange-600"><i class="fa-solid fa-file-invoice-dollar"></i> Bus Expense Management</h3>
+                <button onclick="closeBusExpenseModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <form onsubmit="handleSaveExpense(event)" class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                <input type="hidden" id="edit-expense-id">
+                <h4 id="expense-form-heading" class="text-xs font-bold uppercase tracking-wider text-slate-500">Add New Expense</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Expense Category</label>
+                        <select id="exp-category" required class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm">
+                            <option value="Driver Salary">Driver Salary</option>
+                            <option value="Aya Salary">Aya Salary</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Service & Repairs">Service & Repairs</option>
+                            <option value="Other Expense">Other Expense</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Amount (₹)</label>
+                        <input type="number" id="exp-amount" required placeholder="e.g. 5000" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Expense Date</label>
+                        <input type="date" id="exp-date" required class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Report Month</label>
+                        <select id="exp-report-month" required class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm">
+                            <option value="JUNE">JUNE</option>
+                            <option value="JULY">JULY</option>
+                            <option value="AUG">AUG</option>
+                            <option value="SEP" selected>SEP</option>
+                            <option value="OCT">OCT</option>
+                            <option value="NOV">NOV</option>
+                            <option value="DEC">DEC</option>
+                            <option value="JAN">JAN</option>
+                            <option value="FEB">FEB</option>
+                            <option value="MAR">MAR</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Description / Notes</label>
+                    <input type="text" id="exp-title" required placeholder="e.g. Driver Salary / Diesel Refill" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm">
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" id="expense-submit-btn" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2.5 rounded-xl text-sm shadow transition">
+                        <i class="fa-solid fa-plus-circle mr-1"></i> Save Expense Record
+                    </button>
+                    <button type="button" id="expense-cancel-btn" onclick="resetExpenseForm()" class="hidden px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-50">Cancel</button>
+                </div>
+            </form>
+
+            <div class="overflow-y-auto flex-grow divide-y divide-slate-100 max-h-48" id="expenses-list-container">
+                <!-- Populated -->
+            </div>
+
+            <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+                <span class="text-sm font-bold text-slate-700">Total Expenses: <span id="total-expense-amount" class="text-orange-600">₹0</span></span>
+                <button onclick="closeBusExpenseModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-white text-sm font-medium hover:bg-slate-900">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly / Class Report Modal -->
+    <div id="monthly-report-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-3xl w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 id="report-modal-heading" class="brand-title text-lg font-bold text-slate-800 flex items-center gap-2 text-indigo-700"><i class="fa-solid fa-chart-pie"></i> Monthly Financial & Fee Report</h3>
+                <button onclick="closeMonthlyReportModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <div class="flex flex-wrap gap-3 items-center bg-indigo-50 p-3 rounded-2xl border border-indigo-100">
+                <div class="flex items-center gap-2">
+                    <label class="text-xs font-bold uppercase text-indigo-800">Month:</label>
+                    <select id="report-month-select" onchange="generateMonthlyReportData()" class="px-3 py-1.5 bg-white border border-indigo-200 rounded-xl text-sm font-semibold text-indigo-700">
+                        <!-- Populated -->
+                    </select>
+                </div>
+                <div id="report-class-filter-box" class="flex items-center gap-2">
+                    <label class="text-xs font-bold uppercase text-indigo-800">Class:</label>
+                    <select id="report-class-select" onchange="generateMonthlyReportData()" class="px-3 py-1.5 bg-white border border-indigo-200 rounded-xl text-sm font-semibold text-indigo-700">
+                        <option value="ALL">All Classes Combined</option>
+                        <option value="LKG">LKG</option>
+                        <option value="UKG">UKG</option>
+                        <option value="STANDARD-1">STANDARD-1</option>
+                        <option value="STANDARD-2">STANDARD-2</option>
+                        <option value="STANDARD-3">STANDARD-3</option>
+                        <option value="STANDARD-4">STANDARD-4</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="report-content-box" class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-4 text-xs font-mono overflow-y-auto max-h-80">
+                <!-- Report details -->
+            </div>
+
+            <div class="flex space-x-3 pt-2">
+                <button onclick="downloadReportAsPDF()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-sm shadow transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-download"></i><span>Download A4 PDF Report</span>
+                </button>
+                <button onclick="closeMonthlyReportModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-50">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden A4 Report Template for PDF Download -->
+    <div style="display:none;">
+        <div id="pdf-report-template" style="padding: 30px; font-family: 'Inter', sans-serif; background: #ffffff; width: 750px; color: #1e293b;">
+            <div style="text-align: center; border-bottom: 3px solid #4f46e5; padding-bottom: 15px; margin-bottom: 20px;">
+                <h1 style="color: #4f46e5; font-size: 24px; font-weight: 800; margin: 0;">GLPS MUNDEKARAD</h1>
+                <p style="font-size: 13px; color: #475569; margin: 4px 0 0 0; font-weight: 600;" id="pdf-rep-title">OFFICIAL SCHOOL BUS FEE & FINANCIAL REPORT</p>
+            </div>
+            <div id="pdf-rep-body">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <main-footer class="block">
+        <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
+            <p>&copy; 2026 GLPS MUNDEKARAD. All rights reserved.</p>
+        </footer>
+    </main-footer>
+
+    <script>
+        const monthsList = ['JUNE', 'JULY', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC', 'JAN', 'FEB', 'MAR'];
+
+        // Initial default students from uploaded PDFs
+        const defaultStudents = [
+            // LKG
+            { id: 101, name: 'MUHAMMED RAYHAN', classStd: 'LKG', phone: '9847123456', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 102, name: 'MISNA FATHIMA CK', classStd: 'LKG', phone: '9847123457', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 103, name: 'MUHAMMED HAMDAN K', classStd: 'LKG', phone: '9847123458', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 104, name: 'MUHAMMED ZAYAN N', classStd: 'LKG', phone: '9847123459', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 105, name: 'MUHAMMED RAYAN V', classStd: 'LKG', phone: '9847123460', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 106, name: 'FATHIMA HENZA', classStd: 'LKG', phone: '9847123461', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 107, name: 'FATHIMA LIYA V', classStd: 'LKG', phone: '9847123462', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 108, name: 'ZAYAN E K', classStd: 'LKG', phone: '9847123463', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 109, name: 'AMEENA', classStd: 'LKG', phone: '9847123464', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            
+            // UKG
+            { id: 201, name: 'AYISHA NOURIN V', classStd: 'UKG', phone: '9847223456', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 202, name: 'RIFA FATHIMA', classStd: 'UKG', phone: '9847223457', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 203, name: 'ADHIJITH', classStd: 'UKG', phone: '9847223458', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 204, name: 'RAJIH ALI', classStd: 'UKG', phone: '9847223459', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 205, name: 'MUHAMMED HISHAN', classStd: 'UKG', phone: '9847223460', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 206, name: 'MUHAMMED HASHIR CM', classStd: 'UKG', phone: '9847223461', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 207, name: 'HAMBALA BATHOOL', classStd: 'UKG', phone: '9847223462', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 208, name: 'MUHAMMED HAMDAN', classStd: 'UKG', phone: '9847223463', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 209, name: 'FATHIMA NUHA', classStd: 'UKG', phone: '9847223464', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 210, name: 'MUHAMMED HASHIR CK', classStd: 'UKG', phone: '9847223465', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 211, name: 'RUDRA V', classStd: 'UKG', phone: '9847223466', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+
+            // STANDARD-1
+            { id: 301, name: 'NASHWA FATHIMA', classStd: 'STANDARD-1', phone: '9847323456', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 302, name: 'FATHIMA MARJANA', classStd: 'STANDARD-1', phone: '9847323457', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 303, name: 'MUHAMMED AMEEN', classStd: 'STANDARD-1', phone: '9847323458', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 304, name: 'FATHIMA ISHA V', classStd: 'STANDARD-1', phone: '9847323459', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 305, name: 'AYISHA RIYA C', classStd: 'STANDARD-1', phone: '9847323460', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 306, name: 'FIDHA FATHIMA', classStd: 'STANDARD-1', phone: '9847323461', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 307, name: 'FATHIMA RAZANA N', classStd: 'STANDARD-1', phone: '9847323462', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 308, name: 'FATHIMA HIBA', classStd: 'STANDARD-1', phone: '9847323463', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 309, name: 'MUHAMMED RIZWAN AR', classStd: 'STANDARD-1', phone: '9847323464', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+
+            // STANDARD-2
+            { id: 401, name: 'MUHAMMAD RIZWAN', classStd: 'STANDARD-2', phone: '9847423456', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 402, name: 'ARYANANDA', classStd: 'STANDARD-2', phone: '9847423457', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 403, name: 'FATHIMA MUFEEDHA', classStd: 'STANDARD-2', phone: '9847423458', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 404, name: 'MUHAMMED THAMEEM', classStd: 'STANDARD-2', phone: '9847423459', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 405, name: 'MUHAMMED SHAHABAS', classStd: 'STANDARD-2', phone: '9847423460', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 406, name: 'NISHBA FATHIMA', classStd: 'STANDARD-2', phone: '9847423461', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 407, name: 'ALYNA FATHIMA', classStd: 'STANDARD-2', phone: '9847423462', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 408, name: 'FATHIMA MEHRIN', classStd: 'STANDARD-2', phone: '9847423463', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+
+            // STANDARD-3
+            { id: 501, name: 'MUHAMMED MINHAJ P', classStd: 'STANDARD-3', phone: '9847523456', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 502, name: 'MINHA FATHIMA P', classStd: 'STANDARD-3', phone: '9847523457', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 503, name: 'FATHIMA RIFA', classStd: 'STANDARD-3', phone: '9847523458', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 504, name: 'FATHIMA AFILA', classStd: 'STANDARD-3', phone: '9847523459', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 505, name: 'MUHAMMED HISHAM', classStd: 'STANDARD-3', phone: '9847523460', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 506, name: 'MUHAMMED MUSTHAFA', classStd: 'STANDARD-3', phone: '9847523461', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 507, name: 'MUHAMMED MINHAJ N F', classStd: 'STANDARD-3', phone: '9847523462', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 508, name: 'ALEENA FATHIMA', classStd: 'STANDARD-3', phone: '9847523463', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 509, name: 'MUHAMMED SHAMMAS', classStd: 'STANDARD-3', phone: '9847523464', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 510, name: 'RIDHA FATHIMA N', classStd: 'STANDARD-3', phone: '9847523465', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+
+            // STANDARD-4
+            { id: 601, name: 'SILVA FATHIMA', classStd: 'STANDARD-4', phone: '9847623456', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 602, name: 'MINYA FATHIMA', classStd: 'STANDARD-4', phone: '9847623457', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 603, name: 'HISANA FATHIMA CK', classStd: 'STANDARD-4', phone: '9847623458', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 604, name: 'AJWA FATHIMA T P', classStd: 'STANDARD-4', phone: '9847623459', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 605, name: 'MUHAMMED RIZAN C', classStd: 'STANDARD-4', phone: '9847623460', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 606, name: 'MUHAMMED SHARIF MC', classStd: 'STANDARD-4', phone: '9847623461', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 607, name: 'MUHAMMED RAIHAN N', classStd: 'STANDARD-4', phone: '9847623462', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 608, name: 'ABDULLA MINHAJ CT', classStd: 'STANDARD-4', phone: '9847623463', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 609, name: 'MUHAMMED HASHIM V', classStd: 'STANDARD-4', phone: '9847623464', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 610, name: 'AHMAD NAJIL V', classStd: 'STANDARD-4', phone: '9847623465', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 611, name: 'NIYA FATHIMA K P', classStd: 'STANDARD-4', phone: '9847623466', paidMonths: ['JUNE', 'JULY', 'AUG'] }
+        ];
+
+        let defaultParents = [
+            { username: 'parent1', password: '123', parentName: 'Ramesh Kumar', studentName: 'MUHAMMED RAYHAN', classStd: 'LKG', phone: '9847123456', studentId: 101 }
+        ];
+
+        let students = JSON.parse(localStorage.getItem('glps_bus_students')) || defaultStudents;
+        let registeredParents = JSON.parse(localStorage.getItem('glps_bus_parents')) || defaultParents;
+        let expenses = JSON.parse(localStorage.getItem('glps_bus_expenses')) || [];
+
+        function saveToLocalStorage() {
+            localStorage.setItem('glps_bus_students', JSON.stringify(students));
+            localStorage.setItem('glps_bus_parents', JSON.stringify(registeredParents));
+            localStorage.setItem('glps_bus_expenses', JSON.stringify(expenses));
+        }
+
+        let currentUser = null;
+        let isDirectoryVisible = false;
+
+        window.onload = function() {
+            renderMonthsCheckboxes();
+            populateReportMonthDropdown();
+            const todayStr = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('fee-payment-date');
+            if (dateInput) dateInput.value = todayStr;
+            const expDateInput = document.getElementById('exp-date');
+            if (expDateInput) expDateInput.value = todayStr;
+        };
+
+        function populateReportMonthDropdown() {
+            const select = document.getElementById('report-month-select');
+            if (!select) return;
+            select.innerHTML = '';
+            monthsList.forEach(m => {
+                select.innerHTML += `<option value="${m}" ${m === 'SEP' ? 'selected' : ''}>${m} 2026</option>`;
+            });
+        }
+
+        function renderMonthsCheckboxes() {
+            const container = document.getElementById('months-checkboxes');
+            if (!container) return;
+            container.innerHTML = '';
+            monthsList.forEach(m => {
+                const isPrePaid = ['JUNE', 'JULY', 'AUG'].includes(m);
+                if (isPrePaid) {
+                    container.innerHTML += `
+                        <label class="flex items-center space-x-1.5 bg-emerald-50 p-2 rounded-xl border border-emerald-200 cursor-not-allowed opacity-80">
+                            <input type="checkbox" name="fee-month" value="${m}" checked disabled class="rounded text-emerald-600 focus:ring-emerald-500">
+                            <span class="font-medium text-emerald-800">${m} (Paid)</span>
+                        </label>
+                    `;
+                } else {
+                    container.innerHTML += `
+                        <label class="flex items-center space-x-1.5 bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-50">
+                            <input type="checkbox" name="fee-month" value="${m}" class="rounded text-teal-600 focus:ring-teal-500">
+                            <span class="font-medium text-slate-700">${m}</span>
+                        </label>
+                    `;
+                }
+            });
+        }
+
+        function switchTab(role) {
+            const btnAdmin = document.getElementById('tab-admin');
+            const btnTeacher = document.getElementById('tab-teacher');
+            const btnParent = document.getElementById('tab-parent');
+            const formAdmin = document.getElementById('form-admin');
+            const formTeacher = document.getElementById('form-teacher');
+            const formParent = document.getElementById('form-parent');
+            hideError();
+
+            btnAdmin.className = "flex-1 py-3 rounded-xl text-slate-500 hover:text-slate-800 transition";
+            btnTeacher.className = "flex-1 py-3 rounded-xl text-slate-500 hover:text-slate-800 transition";
+            btnParent.className = "flex-1 py-3 rounded-xl text-slate-500 hover:text-slate-800 transition";
+
+            formAdmin.classList.add('hidden');
+            formTeacher.classList.add('hidden');
+            formParent.classList.add('hidden');
+
+            if (role === 'admin') {
+                btnAdmin.className = "flex-1 py-3 rounded-xl bg-white text-indigo-700 shadow-sm transition font-semibold";
+                formAdmin.classList.remove('hidden');
+            } else if (role === 'teacher') {
+                btnTeacher.className = "flex-1 py-3 rounded-xl bg-white text-indigo-700 shadow-sm transition font-semibold";
+                formTeacher.classList.remove('hidden');
+            } else {
+                btnParent.className = "flex-1 py-3 rounded-xl bg-white text-indigo-700 shadow-sm transition font-semibold";
+                formParent.classList.remove('hidden');
+            }
+        }
+
+        function toggleParentAuthMode(mode) {
+            const loginBox = document.getElementById('parent-login-box');
+            const signupBox = document.getElementById('parent-signup-box');
+            hideError();
+            if (mode === 'signup') {
+                loginBox.classList.add('hidden');
+                signupBox.classList.remove('hidden');
+            } else {
+                signupBox.classList.add('hidden');
+                loginBox.classList.remove('hidden');
+            }
+        }
+
+        function showError(msg) {
+            const errDiv = document.getElementById('login-error');
+            if (!errDiv) return;
+            errDiv.innerText = msg;
+            errDiv.classList.remove('hidden');
+        }
+
+        function hideError() {
+            const errDiv = document.getElementById('login-error');
+            if (errDiv) errDiv.classList.add('hidden');
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('admin-user').value.trim();
+            const pass = document.getElementById('admin-pass').value.trim();
+
+            if (user === 'admin' && pass === 'admin123') {
+                currentUser = { type: 'admin', name: 'Admin (GLPS Mundekarad)' };
+                showDashboard();
+            } else {
+                showError('Invalid username or password!');
+            }
+        }
+
+        function handleTeacherLogin(e) {
+            e.preventDefault();
+            const classVal = document.getElementById('teacher-select').value;
+            const user = document.getElementById('teacher-user').value.trim();
+            const pass = document.getElementById('teacher-pass').value.trim();
+
+            if (!classVal) {
+                showError('Please select a class category.');
+                return;
+            }
+
+            // Simple validation for class teacher login
+            if (user && pass) {
+                currentUser = { type: 'teacher', classStd: classVal, name: `${classVal} Teacher (GLPS Mundekarad)` };
+                showDashboard();
+            } else {
+                showError('Please enter valid teacher credentials.');
+            }
+        }
+
+        function handleParentSignup(e) {
+            e.preventDefault();
+            const parentName = document.getElementById('signup-parent-name').value.trim();
+            const studentName = document.getElementById('signup-student-name').value.trim();
+            const classStd = document.getElementById('signup-student-class').value;
+            const phone = document.getElementById('signup-phone').value.trim();
+            const username = document.getElementById('signup-username').value.trim();
+            const password = document.getElementById('signup-password').value.trim();
+
+            if (registeredParents.some(p => p.username === username)) {
+                showError('Username already exists. Please choose another.');
+                return;
+            }
+
+            let student = students.find(s => s.name.toLowerCase() === studentName.toLowerCase() && s.classStd === classStd);
+            if (!student) {
+                student = {
+                    id: Date.now(),
+                    name: studentName.toUpperCase(),
+                    classStd: classStd,
+                    phone: phone,
+                    paidMonths: ['JUNE', 'JULY', 'AUG']
+                };
+                students.push(student);
+            } else {
+                student.phone = phone;
+            }
+
+            const newParent = {
+                username,
+                password,
+                parentName,
+                studentName: student.name,
+                classStd,
+                phone,
+                studentId: student.id
+            };
+
+            registeredParents.push(newParent);
+            saveToLocalStorage();
+            currentUser = { type: 'parent', studentId: student.id, name: student.name, classStd: student.classStd, phone: phone };
+            showDashboard();
+        }
+
+        function handleParentLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('parent-user-input').value.trim();
+            const p = document.getElementById('parent-pass-input').value.trim();
+
+            const found = registeredParents.find(rp => rp.username === u && rp.password === p);
+            if (found) {
+                currentUser = { type: 'parent', studentId: found.studentId, name: found.studentName, classStd: found.classStd, phone: found.phone };
+                showDashboard();
+            } else {
+                showError('Invalid parent username or password! Please check or Sign Up.');
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('auth-container').classList.add('hidden');
+            document.getElementById('user-status').classList.remove('hidden');
+            document.getElementById('logged-in-user-name').innerText = currentUser.name;
+
+            if (currentUser.type === 'admin' || currentUser.type === 'teacher') {
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                
+                const dashboardTitle = document.getElementById('dashboard-title');
+                const btnExpense = document.getElementById('btn-expense');
+                const btnReport = document.getElementById('btn-report');
+                const btnReportTitle = document.getElementById('btn-report-title');
+                const btnReportDesc = document.getElementById('btn-report-desc');
+                const grid = document.getElementById('admin-buttons-grid');
+
+                if (currentUser.type === 'teacher') {
+                    if (dashboardTitle) dashboardTitle.innerText = `${currentUser.classStd} Teacher Control Center`;
+                    if (btnExpense) btnExpense.style.display = 'none';
+                    if (btnReportTitle) btnReportTitle.innerText = `${currentUser.classStd} Fee Report`;
+                    if (btnReportDesc) btnReportDesc.innerText = `View and download A4 fee grid report for ${currentUser.classStd}`;
+                    if (grid) grid.className = "grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto py-4";
+                } else {
+                    if (dashboardTitle) dashboardTitle.innerText = "Admin Control Center";
+                    if (btnExpense) btnExpense.style.display = 'flex';
+                    if (btnReportTitle) btnReportTitle.innerText = "Monthly Report";
+                    if (btnReportDesc) btnReportDesc.innerText = "View collections, dues, salary & expense summary";
+                    if (grid) grid.className = "grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto py-4";
+                }
+            } else {
+                document.getElementById('parent-dashboard').classList.remove('hidden');
+                document.getElementById('parent-welcome-name').innerText = currentUser.name;
+                document.getElementById('parent-welcome-class').innerText = currentUser.classStd;
+                renderParentFeeStatus();
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('user-status').classList.add('hidden');
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('parent-dashboard').classList.add('hidden');
+            document.getElementById('auth-container').classList.remove('hidden');
+            document.getElementById('admin-user').value = '';
+            document.getElementById('admin-pass').value = '';
+            document.getElementById('teacher-select').value = '';
+            document.getElementById('teacher-user').value = '';
+            document.getElementById('teacher-pass').value = '';
+            document.getElementById('parent-user-input').value = '';
+            document.getElementById('parent-pass-input').value = '';
+            
+            const btnExpense = document.getElementById('btn-expense');
+            if (btnExpense) btnExpense.style.display = 'flex';
+            const btnReportTitle = document.getElementById('btn-report-title');
+            const btnReportDesc = document.getElementById('btn-report-desc');
+            if (btnReportTitle) btnReportTitle.innerText = "Monthly Report";
+            if (btnReportDesc) btnReportDesc.innerText = "View collections, dues, salary & expense summary";
+            const grid = document.getElementById('admin-buttons-grid');
+            if (grid) grid.className = "grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto py-4";
+
+            hideError();
+        }
+
+        function openBusFeeModal() {
+            isDirectoryVisible = false;
+            document.getElementById('student-directory-section').classList.add('hidden');
+            document.getElementById('toggle-directory-btn').innerHTML = `<i class="fa-solid fa-eye mr-1"></i> Show Directory & Fee Status`;
+
+            const classSelect = document.getElementById('fee-class-select');
+            if (currentUser && currentUser.type === 'teacher') {
+                classSelect.value = currentUser.classStd;
+                classSelect.disabled = true;
+                updateStudentsDropdown();
+            } else {
+                classSelect.value = '';
+                classSelect.disabled = false;
+                document.getElementById('fee-student-select').innerHTML = '<option value="">-- Choose Student --</option>';
+            }
+            document.getElementById('bus-fee-modal').classList.remove('hidden');
+        }
+
+        function closeBusFeeModal() {
+            document.getElementById('bus-fee-modal').classList.add('hidden');
+        }
+
+        function toggleStudentDirectoryView() {
+            isDirectoryVisible = !isDirectoryVisible;
+            const section = document.getElementById('student-directory-section');
+            const btn = document.getElementById('toggle-directory-btn');
+            
+            if (isDirectoryVisible) {
+                section.classList.remove('hidden');
+                btn.innerHTML = `<i class="fa-solid fa-eye-slash mr-1"></i> Hide Directory & Fee Status`;
+                renderStudentsTable();
+            } else {
+                section.classList.add('hidden');
+                btn.innerHTML = `<i class="fa-solid fa-eye mr-1"></i> Show Directory & Fee Status`;
+            }
+        }
+
+        function renderStudentsTable() {
+            const tbody = document.getElementById('admin-students-table');
+            if (!tbody) return;
+
+            let filterClass = '';
+            const filterDropdown = document.getElementById('filter-class');
+
+            if (currentUser && currentUser.type === 'teacher') {
+                filterClass = currentUser.classStd;
+                if (filterDropdown) {
+                    filterDropdown.value = currentUser.classStd;
+                    filterDropdown.disabled = true;
+                }
+            } else {
+                filterClass = filterDropdown ? filterDropdown.value : '';
+            }
+
+            const filteredStudents = filterClass ? students.filter(s => s.classStd === filterClass) : students;
+            document.getElementById('stat-total-students').innerText = filteredStudents.length;
+            tbody.innerHTML = '';
+
+            if (filteredStudents.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">No students found.</td></tr>`;
+                return;
+            }
+
+            filteredStudents.forEach((s) => {
+                const unpaidMonths = monthsList.filter(m => !s.paidMonths.includes(m));
+                const unpaidCount = unpaidMonths.length;
+                const statusBadge = unpaidCount === 0 
+                    ? `<span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full text-xs font-semibold">Fully Paid</span>`
+                    : `<span class="bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full text-xs font-semibold">${unpaidCount} Months Due</span>`;
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50/50 transition">
+                        <td class="p-3 font-medium text-slate-800">${s.name}</td>
+                        <td class="p-3 text-slate-600">${s.classStd}</td>
+                        <td class="p-3 text-slate-600">${s.phone || 'Not Set'}</td>
+                        <td class="p-3 text-xs text-slate-500 font-mono">${s.paidMonths.length > 0 ? s.paidMonths.join(', ') : 'None'}</td>
+                        <td class="p-3">${statusBadge}</td>
+                        <td class="p-3 text-right space-x-1">
+                            <button onclick="openEditStudentModal(${s.id})" class="text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-xl transition" title="Edit Student"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteStudent(${s.id})" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-2 rounded-xl transition" title="Delete Student"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderParentFeeStatus() {
+            const container = document.getElementById('parent-fee-status-container');
+            if (!container) return;
+            const student = students.find(s => s.id === currentUser.studentId);
+            if (!student) return;
+
+            container.innerHTML = '';
+            monthsList.forEach(m => {
+                const isPaid = student.paidMonths.includes(m);
+                const badge = isPaid 
+                    ? `<span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold">Paid</span>`
+                    : `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">Due / Pending</span>`;
+                
+                container.innerHTML += `
+                    <div class="flex justify-between items-center p-3 bg-slate-50 rounded-2xl text-sm border border-slate-100">
+                        <span class="font-semibold text-slate-700">${m} 2026-27</span>
+                        ${badge}
+                    </div>
+                `;
+            });
+        }
+
+        function openAddStudentModal() {
+            document.getElementById('student-modal-title').innerText = "Add New Student";
+            document.getElementById('edit-student-id').value = "";
+            document.getElementById('new-name').value = "";
+            const newClassSelect = document.getElementById('new-class');
+            if (currentUser && currentUser.type === 'teacher') {
+                newClassSelect.value = currentUser.classStd;
+                newClassSelect.disabled = true;
+            } else {
+                newClassSelect.value = "LKG";
+                newClassSelect.disabled = false;
+            }
+            document.getElementById('new-phone').value = "";
+            document.getElementById('add-student-modal').classList.remove('hidden');
+        }
+
+        function openEditStudentModal(id) {
+            const student = students.find(s => s.id === id);
+            if (!student) return;
+            document.getElementById('student-modal-title').innerText = "Edit Student Details";
+            document.getElementById('edit-student-id').value = student.id;
+            document.getElementById('new-name').value = student.name;
+            const newClassSelect = document.getElementById('new-class');
+            newClassSelect.value = student.classStd;
+            if (currentUser && currentUser.type === 'teacher') {
+                newClassSelect.disabled = true;
+            } else {
+                newClassSelect.disabled = false;
+            }
+            document.getElementById('new-phone').value = student.phone;
+            document.getElementById('add-student-modal').classList.remove('hidden');
+        }
+
+        function closeAddStudentModal() {
+            document.getElementById('add-student-modal').classList.add('hidden');
+        }
+
+        function handleSaveStudent(e) {
+            e.preventDefault();
+            const editId = document.getElementById('edit-student-id').value;
+            const name = document.getElementById('new-name').value.trim().toUpperCase();
+            const classStd = currentUser && currentUser.type === 'teacher' ? currentUser.classStd : document.getElementById('new-class').value;
+            const phone = document.getElementById('new-phone').value.trim();
+
+            if (editId) {
+                const student = students.find(s => s.id == editId);
+                if (student) {
+                    student.name = name;
+                    student.classStd = classStd;
+                    student.phone = phone;
+                }
+            } else {
+                const newStudent = {
+                    id: Date.now(),
+                    name,
+                    classStd,
+                    phone,
+                    paidMonths: ['JUNE', 'JULY', 'AUG']
+                };
+                students.push(newStudent);
+            }
+
+            saveToLocalStorage();
+            if (isDirectoryVisible) {
+                renderStudentsTable();
+            }
+            closeAddStudentModal();
+            updateStudentsDropdown();
+        }
+
+        function deleteStudent(id) {
+            if (confirm('Are you sure you want to delete this student?')) {
+                students = students.filter(s => s.id !== id);
+                saveToLocalStorage();
+                if (isDirectoryVisible) {
+                    renderStudentsTable();
+                }
+                updateStudentsDropdown();
+            }
+        }
+
+        function updateStudentsDropdown() {
+            const selectedClass = currentUser && currentUser.type === 'teacher' ? currentUser.classStd : document.getElementById('fee-class-select').value;
+            const studentSelect = document.getElementById('fee-student-select');
+            studentSelect.innerHTML = '<option value="">-- Choose Student --</option>';
+
+            const filtered = students.filter(s => s.classStd === selectedClass);
+            filtered.forEach(s => {
+                studentSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+            });
+            document.getElementById('fee-parent-phone').value = '';
+        }
+
+        function fillStudentPhone() {
+            const studentId = document.getElementById('fee-student-select').value;
+            const student = students.find(s => s.id == studentId);
+            if (student) {
+                document.getElementById('fee-parent-phone').value = student.phone;
+            }
+        }
+
+        function handleFeePayment(e) {
+            e.preventDefault();
+            const studentId = document.getElementById('fee-student-select').value;
+            const manualPhone = document.getElementById('fee-parent-phone').value.trim();
+            const paymentDate = document.getElementById('fee-payment-date').value;
+            const feePerMonth = parseFloat(document.getElementById('fee-per-month').value) || 350;
+            const checkboxes = document.querySelectorAll('input[name="fee-month"]:checked:not(:disabled)');
+            
+            const selectedMonths = Array.from(checkboxes).map(cb => cb.value);
+            if (!studentId || selectedMonths.length === 0) {
+                alert('Please select a student and at least one unpaid month.');
+                return;
+            }
+
+            const student = students.find(s => s.id == studentId);
+            if (!student) return;
+
+            if (manualPhone) {
+                student.phone = manualPhone;
+            }
+
+            selectedMonths.forEach(m => {
+                if (!student.paidMonths.includes(m)) {
+                    student.paidMonths.push(m);
+                }
+            });
+
+            saveToLocalStorage();
+            const totalAmount = selectedMonths.length * feePerMonth;
+            const formattedDate = paymentDate ? new Date(paymentDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+            const msg = `🚌 *GLPS MUNDEKARAD - SCHOOL BUS FEE RECEIPT* 🚌\n\n` +
+                        `Date: ${formattedDate}\n` +
+                        `Student Name: *${student.name}*\n` +
+                        `Class: ${student.classStd}\n` +
+                        `Paid Month(s): *${selectedMonths.join(', ')}*\n` +
+                        `Amount Paid: *₹${totalAmount}*\n\n` +
+                        `Thank you!\n` +
+                        `*GLPS MUNDEKARAD Team*`;
+            
+            const encodedText = encodeURIComponent(msg);
+            const whatsappUrl = `https://wa.me/91${student.phone}?text=${encodedText}`;
+            window.open(whatsappUrl, '_blank');
+
+            closeBusFeeModal();
+            if (isDirectoryVisible) {
+                renderStudentsTable();
+            }
+        }
+
+        function downloadParentPDFReport() {
+            const student = students.find(s => s.id === currentUser.studentId);
+            if (!student) return;
+
+            const unpaidMonths = monthsList.filter(m => !student.paidMonths.includes(m));
+            const repBody = document.getElementById('pdf-rep-body');
+            document.getElementById('pdf-rep-title').innerText = `FEE STATEMENT FOR ${student.name} (${student.classStd})`;
+
+            repBody.innerHTML = `
+                <p><b>Date:</b> ${new Date().toLocaleDateString('en-GB')}</p>
+                <p><b>Parent Phone:</b> ${student.phone || currentUser.phone}</p>
+                <hr style="margin: 15px 0; border: 1px solid #e2e8f0;">
+                <p style="font-size: 16px;"><b>Paid Months:</b> <span style="color: #059669; font-weight: bold;">${student.paidMonths.join(', ')}</span></p>
+                <p style="font-size: 16px;"><b>Remaining Dues:</b> <span style="color: #dc2626; font-weight: bold;">${unpaidMonths.length > 0 ? unpaidMonths.join(', ') : 'None (Fully Paid)'}</span></p>
+                <div style="background: #ecfdf5; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: right;">
+                    <h3 style="color: #065f46; margin: 0;">Total Paid: ₹${student.paidMonths.length * 350}</h3>
+                </div>
+            `;
+
+            const element = document.getElementById('pdf-report-template');
+            element.style.display = 'block';
+            const opt = {
+                margin:       10,
+                filename:     `Bus_Fee_Statement_${student.name.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save().then(() => {
+                element.style.display = 'none';
+            });
+        }
+
+        function openBusExpenseModal() {
+            resetExpenseForm();
+            renderExpensesList();
+            document.getElementById('bus-expense-modal').classList.remove('hidden');
+        }
+
+        function closeBusExpenseModal() {
+            document.getElementById('bus-expense-modal').classList.add('hidden');
+        }
+
+        function resetExpenseForm() {
+            document.getElementById('edit-expense-id').value = '';
+            document.getElementById('exp-category').value = 'Driver Salary';
+            document.getElementById('exp-amount').value = '';
+            document.getElementById('exp-title').value = '';
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('exp-date').value = todayStr;
+            document.getElementById('exp-report-month').value = 'SEP';
+            document.getElementById('expense-modal-title').innerHTML = `<i class="fa-solid fa-file-invoice-dollar"></i> Bus Expense Management`;
+            document.getElementById('expense-form-heading').innerText = "Add New Expense";
+            document.getElementById('expense-submit-btn').innerHTML = `<i class="fa-solid fa-plus-circle mr-1"></i> Save Expense Record`;
+            document.getElementById('expense-cancel-btn').classList.add('hidden');
+        }
+
+        function handleSaveExpense(e) {
+            e.preventDefault();
+            const editId = document.getElementById('edit-expense-id').value;
+            const category = document.getElementById('exp-category').value;
+            const title = document.getElementById('exp-title').value.trim();
+            const amount = parseFloat(document.getElementById('exp-amount').value);
+            const rawDate = document.getElementById('exp-date').value;
+            const reportMonth = document.getElementById('exp-report-month').value;
+
+            const formattedDate = rawDate ? new Date(rawDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+            if (editId) {
+                const exp = expenses.find(ex => ex.id == editId);
+                if (exp) {
+                    exp.category = category;
+                    exp.title = title;
+                    exp.amount = amount;
+                    exp.date = formattedDate;
+                    exp.month = reportMonth;
+                }
+            } else {
+                const newExp = {
+                    id: Date.now(),
+                    category,
+                    title,
+                    amount,
+                    date: formattedDate,
+                    month: reportMonth
+                };
+                expenses.push(newExp);
+            }
+
+            saveToLocalStorage();
+            resetExpenseForm();
+            renderExpensesList();
+        }
+
+        function openEditExpenseModal(id) {
+            const exp = expenses.find(ex => ex.id === id);
+            if (!exp) return;
+            document.getElementById('edit-expense-id').value = exp.id;
+            document.getElementById('exp-category').value = exp.category;
+            document.getElementById('exp-amount').value = exp.amount;
+            document.getElementById('exp-title').value = exp.title;
+            document.getElementById('exp-report-month').value = exp.month || 'SEP';
+            document.getElementById('expense-modal-title').innerHTML = `<i class="fa-solid fa-pen"></i> Edit Bus Expense`;
+            document.getElementById('expense-form-heading').innerText = "Edit Expense Details";
+            document.getElementById('expense-submit-btn').innerHTML = `<i class="fa-solid fa-check mr-1"></i> Update Expense`;
+            document.getElementById('expense-cancel-btn').classList.remove('hidden');
+        }
+
+        function deleteExpense(id) {
+            if (confirm('Are you sure you want to delete this expense record?')) {
+                expenses = expenses.filter(ex => ex.id !== id);
+                saveToLocalStorage();
+                renderExpensesList();
+            }
+        }
+
+        function renderExpensesList() {
+            const container = document.getElementById('expenses-list-container');
+            const totalEl = document.getElementById('total-expense-amount');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            let total = 0;
+            if (expenses.length === 0) {
+                container.innerHTML = `<p class="p-4 text-center text-slate-400 text-xs">No expenses recorded yet</p>`;
+            } else {
+                expenses.forEach(exp => {
+                    total += exp.amount;
+                    container.innerHTML += `
+                        <div class="py-2.5 flex justify-between items-center text-xs">
+                            <div>
+                                <span class="bg-orange-100 text-orange-800 font-bold px-2 py-0.5 rounded mr-2">${exp.category}</span>
+                                <span class="font-semibold text-slate-800">${exp.title}</span>
+                                <span class="text-slate-400 block mt-0.5">${exp.date} (${exp.month})</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="font-bold text-orange-600">₹${exp.amount.toLocaleString('en-IN')}</span>
+                                <button onclick="openEditExpenseModal(${exp.id})" class="text-indigo-600 hover:text-indigo-800 p-1"><i class="fa-solid fa-pen text-xs"></i></button>
+                                <button onclick="deleteExpense(${exp.id})" class="text-red-500 hover:text-red-700 p-1"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            if (totalEl) totalEl.innerText = `₹${total.toLocaleString('en-IN')}`;
+        }
+
+        function openMonthlyReportModal() {
+            const classFilterBox = document.getElementById('report-class-filter-box');
+            const heading = document.getElementById('report-modal-heading');
+
+            if (currentUser && currentUser.type === 'teacher') {
+                if (classFilterBox) classFilterBox.style.display = 'none';
+                if (heading) heading.innerHTML = `<i class="fa-solid fa-table"></i> ${currentUser.classStd} Bus Fee Report`;
+                document.getElementById('report-class-select').value = currentUser.classStd;
+            } else {
+                if (classFilterBox) classFilterBox.style.display = 'flex';
+                if (heading) heading.innerHTML = `<i class="fa-solid fa-chart-pie"></i> Monthly Financial & Fee Report`;
+                document.getElementById('report-class-select').value = 'ALL';
+            }
+
+            generateMonthlyReportData();
+            document.getElementById('monthly-report-modal').classList.remove('hidden');
+        }
+
+        function closeMonthlyReportModal() {
+            document.getElementById('monthly-report-modal').classList.add('hidden');
+        }
+
+        function generateMonthlyReportData() {
+            const selectedMonth = document.getElementById('report-month-select').value;
+            const selectedClass = currentUser && currentUser.type === 'teacher' ? currentUser.classStd : document.getElementById('report-class-select').value;
+            const box = document.getElementById('report-content-box');
+            if (!box) return;
+
+            const targetStudents = selectedClass === 'ALL' ? students : students.filter(s => s.classStd === selectedClass);
+
+            let feeCollectedCount = 0;
+            let feePendingCount = 0;
+            const monthlyFeeRate = 350;
+
+            targetStudents.forEach(s => {
+                if (s.paidMonths.includes(selectedMonth)) {
+                    feeCollectedCount++;
+                } else {
+                    feePendingCount++;
+                }
+            });
+
+            const totalFeeCollectedAmount = feeCollectedCount * monthlyFeeRate;
+            const totalFeePendingAmount = feePendingCount * monthlyFeeRate;
+
+            let driverSalary = 0;
+            let ayaSalary = 0;
+            let dieselExp = 0;
+            let serviceExp = 0;
+            let otherExp = 0;
+
+            if (selectedClass === 'ALL') {
+                expenses.filter(e => e.month === selectedMonth).forEach(e => {
+                    if (e.category === 'Driver Salary') driverSalary += e.amount;
+                    else if (e.category === 'Aya Salary') ayaSalary += e.amount;
+                    else if (e.category === 'Diesel') dieselExp += e.amount;
+                    else if (e.category === 'Service & Repairs') serviceExp += e.amount;
+                    else otherExp += e.amount;
+                });
+            }
+
+            const totalExpenses = driverSalary + ayaSalary + dieselExp + serviceExp + otherExp;
+            const netBalance = totalFeeCollectedAmount - totalExpenses;
+
+            let studentRowsHTML = '';
+            targetStudents.forEach((s, idx) => {
+                const isPaid = s.paidMonths.includes(selectedMonth);
+                studentRowsHTML += `
+                    <tr>
+                        <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">${idx + 1}</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 6px;">${s.name}</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">${s.classStd}</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center; font-weight: bold; color: ${isPaid ? '#059669' : '#dc2626'};">${isPaid ? 'PAID' : 'DUE'}</td>
+                    </tr>
+                `;
+            });
+
+            box.innerHTML = `
+                <div class="space-y-4">
+                    <p class="brand-title font-bold text-indigo-700 text-sm border-b pb-1">📊 REPORT FOR ${selectedMonth} 2026 (${selectedClass === 'ALL' ? 'All Classes' : selectedClass})</p>
+                    
+                    <div class="bg-white p-3 rounded-xl border space-y-1">
+                        <p class="font-bold text-slate-700">1. FEE COLLECTION SUMMARY</p>
+                        <p>• Students Paid: <b>${feeCollectedCount}</b> (₹${totalFeeCollectedAmount.toLocaleString('en-IN')})</p>
+                        <p>• Students Pending: <b>${feePendingCount}</b> (Est. ₹${totalFeePendingAmount.toLocaleString('en-IN')})</p>
+                    </div>
+
+                    ${selectedClass === 'ALL' ? `
+                    <div class="bg-white p-3 rounded-xl border space-y-1">
+                        <p class="font-bold text-slate-700">2. BUS EXPENSES SUMMARY</p>
+                        <p>• Driver Salary: ₹${driverSalary.toLocaleString('en-IN')}</p>
+                        <p>• Aya Salary: ₹${ayaSalary.toLocaleString('en-IN')}</p>
+                        <p>• Diesel: ₹${dieselExp.toLocaleString('en-IN')}</p>
+                        <p>• Service & Repairs: ₹${serviceExp.toLocaleString('en-IN')}</p>
+                        <p>• Other Expenses: ₹${otherExp.toLocaleString('en-IN')}</p>
+                        <p class="font-bold text-orange-600 pt-1 border-t">Total Expenses: ₹${totalExpenses.toLocaleString('en-IN')}</p>
+                    </div>
+
+                    <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-200 font-bold text-indigo-900 flex justify-between">
+                        <span>NET BALANCE:</span>
+                        <span class="${netBalance >= 0 ? 'text-emerald-600' : 'text-red-600'}">₹${netBalance.toLocaleString('en-IN')}</span>
+                    </div>` : ''}
+
+                    <div class="bg-white p-3 rounded-xl border space-y-2">
+                        <p class="font-bold text-slate-700">3. STUDENT-WISE STATUS (${selectedMonth})</p>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+                            <thead>
+                                <tr style="background: #f1f5f9;">
+                                    <th style="border: 1px solid #cbd5e1; padding: 6px;">#</th>
+                                    <th style="border: 1px solid #cbd5e1; padding: 6px;">Student Name</th>
+                                    <th style="border: 1px solid #cbd5e1; padding: 6px;">Class</th>
+                                    <th style="border: 1px solid #cbd5e1; padding: 6px;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${studentRowsHTML}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function downloadReportAsPDF() {
+            const selectedMonth = document.getElementById('report-month-select').value;
+            const selectedClass = currentUser && currentUser.type === 'teacher' ? currentUser.classStd : document.getElementById('report-class-select').value;
+            const repBody = document.getElementById('pdf-rep-body');
+            document.getElementById('pdf-rep-title').innerText = `OFFICIAL REPORT FOR ${selectedMonth} 2026 (${selectedClass})`;
+
+            const box = document.getElementById('report-content-box');
+            repBody.innerHTML = box.innerHTML;
+
+            const element = document.getElementById('pdf-report-template');
+            element.style.display = 'block';
+            const opt = {
+                margin:       10,
+                filename:     `GLPS_Bus_Report_${selectedMonth}_${selectedClass}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save().then(() => {
+                element.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
