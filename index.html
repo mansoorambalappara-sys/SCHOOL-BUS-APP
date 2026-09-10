@@ -4,13 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Bus App - GLPS MUNDEKARAD</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Outfit & Inter for ultra-premium look -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- html2pdf for A4 PDF receipts and reports -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -37,19 +33,18 @@
                 <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-xl text-xs transition shadow font-medium">Logout</button>
             </div>
             
-            <div class="bg-white/10 backdrop-blur-md text-white p-4 rounded-3xl shadow-inner mb-3 border border-white/20">
+            <div class="bg-white/15 backdrop-blur-md text-white p-4 rounded-3xl shadow-inner mb-3 border border-white/20">
                 <i class="fa-solid fa-bus text-4xl animate-pulse"></i>
             </div>
             <div>
                 <h1 class="brand-title text-3xl sm:text-5xl font-black tracking-wider uppercase bg-gradient-to-r from-white via-indigo-100 to-indigo-300 bg-clip-text text-transparent drop-shadow-md">School Bus App</h1>
-                <p class="text-xs sm:text-sm text-indigo-200 mt-2 font-bold tracking-widest uppercase bg-indigo-950/60 px-5 py-2 rounded-full inline-block border border-indigo-500/30">Run by GLPS MUNDEKARAD</p>
+                <p class="text-xs sm:text-sm text-indigo-200 mt-2 font-extrabold tracking-widest uppercase bg-indigo-950/60 px-6 py-2 rounded-full inline-block border border-indigo-500/30">Run by GLPS MUNDEKARAD</p>
             </div>
         </div>
     </header>
 
     <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6">
         
-        <!-- Login Container -->
         <div id="auth-container" class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 my-8">
             <div class="bg-gradient-to-br from-indigo-600 to-blue-700 p-6 text-white text-center">
                 <h2 class="brand-title text-2xl font-bold">Portal Login</h2>
@@ -64,6 +59,7 @@
                 </div>
 
                 <div id="login-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl"></div>
+                <div id="login-success" class="hidden mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-600 text-sm rounded-xl"></div>
 
                 <!-- Admin Form -->
                 <form id="form-admin" onsubmit="handleAdminLogin(event)" class="space-y-4">
@@ -145,21 +141,6 @@
                                 <input type="text" id="signup-parent-name" required placeholder="Your Full Name" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Student Name</label>
-                                <input type="text" id="signup-student-name" required placeholder="Child's Name" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Class / Standard</label>
-                                <select id="signup-student-class" required class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
-                                    <option value="LKG">LKG</option>
-                                    <option value="UKG">UKG</option>
-                                    <option value="STANDARD-1">STANDARD-1</option>
-                                    <option value="STANDARD-2">STANDARD-2</option>
-                                    <option value="STANDARD-3">STANDARD-3</option>
-                                    <option value="STANDARD-4">STANDARD-4</option>
-                                </select>
-                            </div>
-                            <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">WhatsApp Mobile Number</label>
                                 <input type="tel" id="signup-phone" required placeholder="10-digit mobile number" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
                             </div>
@@ -171,7 +152,7 @@
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Choose Password</label>
                                 <input type="password" id="signup-password" required placeholder="Create password" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
                             </div>
-                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-emerald-200 transition duration-200 text-sm">Register & Login</button>
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-emerald-200 transition duration-200 text-sm">Register Parent Account</button>
                         </form>
                         <div class="mt-3 text-center border-t pt-2">
                             <button type="button" onclick="toggleParentAuthMode('login')" class="text-xs font-bold text-indigo-600 hover:underline">Already registered? Back to Login</button>
@@ -181,14 +162,12 @@
             </div>
         </div>
 
-        <!-- Admin & Teacher Dashboard -->
         <div id="admin-dashboard" class="hidden space-y-8">
             <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 text-center">
                 <h2 id="dashboard-title" class="brand-title text-2xl font-extrabold text-slate-800">Control Center</h2>
                 <p class="text-sm text-slate-500 mt-1">GLPS MUNDEKARAD School Bus Operations & Financials</p>
             </div>
 
-            <!-- 3 Main 3D Buttons Grid (or 2 for teacher) -->
             <div id="admin-buttons-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto py-4">
                 
                 <!-- Button 1: Bus Fee Management -->
@@ -227,41 +206,49 @@
             </div>
         </div>
 
-        <!-- Parent Dashboard -->
-        <div id="parent-dashboard" class="hidden space-y-6">
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <h2 class="brand-title text-xl font-bold text-slate-800">Parent Dashboard - Bus Fee Status</h2>
-                    <p class="text-sm text-slate-500">GLPS MUNDEKARAD Bus Service</p>
-                </div>
-                <div class="bg-indigo-50 text-indigo-700 px-4 py-2.5 rounded-2xl text-sm font-medium border border-indigo-100">
-                    Student: <span id="parent-welcome-name" class="font-bold"></span> (<span id="parent-welcome-class"></span>)
-                </div>
-            </div>
-
-            <div class="max-w-md mx-auto py-4">
-                <button onclick="downloadParentPDFReport()" class="btn-3d w-full bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-6 rounded-3xl flex flex-col items-center justify-center space-y-3 border-b-8 border-teal-900 group hover:scale-[1.02]">
-                    <div class="bg-white/20 p-3 rounded-2xl group-hover:bg-white/30 transition">
-                        <i class="fa-solid fa-file-pdf text-3xl"></i>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="brand-title text-lg font-bold tracking-wide">Download Bus Fee Statement (PDF)</h3>
-                        <p class="text-xs text-emerald-100 mt-0.5 font-medium">View and download complete fee statement</p>
-                    </div>
-                </button>
+        <div id="parent-dashboard" class="hidden space-y-6 max-w-2xl mx-auto">
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 text-center space-y-2">
+                <h2 class="brand-title text-2xl font-bold text-slate-800">Parent Portal - Bus Fee Status</h2>
+                <p class="text-sm text-slate-500">Welcome, <span id="parent-welcome-name" class="font-bold text-indigo-600"></span></p>
             </div>
 
             <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 space-y-4">
-                <h3 class="brand-title font-bold text-slate-800 mb-2">Detailed Monthly Fee Status</h3>
-                <div class="space-y-3" id="parent-fee-status-container">
-                    <!-- Populated dynamically -->
+                <h3 class="brand-title font-bold text-slate-800 text-base flex items-center gap-2"><i class="fa-solid fa-magnifying-glass text-indigo-600"></i> Search Child Fee Status & Statement</h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-indigo-900 mb-1">1. Select Class</label>
+                        <select id="parent-search-class" onchange="resetParentSearchBox()" class="w-full px-3 py-2.5 bg-white border border-indigo-200 rounded-xl text-sm font-semibold text-indigo-700">
+                            <option value="">-- Choose Class --</option>
+                            <option value="LKG">LKG</option>
+                            <option value="UKG">UKG</option>
+                            <option value="STANDARD-1">STANDARD-1</option>
+                            <option value="STANDARD-2">STANDARD-2</option>
+                            <option value="STANDARD-3">STANDARD-3</option>
+                            <option value="STANDARD-4">STANDARD-4</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-indigo-900 mb-1">2. Type Child Name (3+ letters)</label>
+                        <input type="text" id="parent-search-input" oninput="filterParentSearchStudents()" placeholder="Type e.g. rah..." class="w-full px-3 py-2.5 bg-white border border-indigo-200 rounded-xl text-sm font-semibold text-indigo-700">
+                    </div>
+                </div>
+
+                <div id="parent-search-results-box" class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3 overflow-y-auto max-h-72">
+                    <p class="text-xs text-slate-400 text-center">Please select class and type 3-4 letters of student name above.</p>
+                </div>
+
+                <div class="pt-2">
+                    <button onclick="downloadParentSearchedPDF()" id="download-parent-pdf-btn" class="hidden btn-3d w-full bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-4 rounded-2xl flex items-center justify-center space-x-2 font-bold shadow">
+                        <i class="fa-solid fa-file-pdf text-xl"></i>
+                        <span>Download A4 PDF Fee Statement</span>
+                    </button>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <!-- Bus Fee Management Modal -->
     <div id="bus-fee-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-5xl w-full p-6 shadow-2xl border border-slate-100 space-y-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-3">
@@ -320,7 +307,7 @@
                         <input type="number" id="fee-per-month" value="350" required class="w-32 px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium">
                     </div>
                     <button type="submit" class="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white font-semibold px-6 py-3 rounded-xl text-sm shadow-md transition">
-                        <i class="fa-solid fa-receipt mr-1"></i> Record Payment & WhatsApp Receipt
+                        <i class="fa-solid fa-receipt mr-1"></i> Record Payment & WhatsApp Text Receipt
                     </button>
                 </div>
             </form>
@@ -378,7 +365,6 @@
         </div>
     </div>
 
-    <!-- Add Student Modal -->
     <div id="add-student-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4">
             <div class="flex justify-between items-center">
@@ -414,7 +400,6 @@
         </div>
     </div>
 
-    <!-- Bus Expense Modal -->
     <div id="bus-expense-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center">
@@ -485,7 +470,6 @@
         </div>
     </div>
 
-    <!-- Monthly / Class Report Modal -->
     <div id="monthly-report-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-3xl w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center border-b pb-3">
@@ -527,12 +511,11 @@
         </div>
     </div>
 
-    <!-- Hidden A4 Report Template for PDF Download -->
     <div style="display:none;">
-        <div id="pdf-report-template" style="padding: 30px; font-family: 'Inter', sans-serif; background: #ffffff; width: 750px; color: #1e293b;">
-            <div style="text-align: center; border-bottom: 3px solid #4f46e5; padding-bottom: 15px; margin-bottom: 20px;">
-                <h1 style="color: #4f46e5; font-size: 24px; font-weight: 800; margin: 0;">GLPS MUNDEKARAD</h1>
-                <p style="font-size: 13px; color: #475569; margin: 4px 0 0 0; font-weight: 600;" id="pdf-rep-title">OFFICIAL SCHOOL BUS FEE & FINANCIAL REPORT</p>
+        <div id="pdf-report-template" style="padding: 25px; font-family: 'Inter', sans-serif; background: #ffffff; width: 750px; color: #1e293b; max-height: 1100px; box-sizing: border-box;">
+            <div style="text-align: center; border-bottom: 3px solid #4f46e5; padding-bottom: 12px; margin-bottom: 15px;">
+                <h1 style="color: #4f46e5; font-size: 22px; font-weight: 800; margin: 0;">GLPS MUNDEKARAD</h1>
+                <p style="font-size: 12px; color: #475569; margin: 4px 0 0 0; font-weight: 600;" id="pdf-rep-title">OFFICIAL SCHOOL BUS FEE & FINANCIAL REPORT</p>
             </div>
             <div id="pdf-rep-body">
                 <!-- Populated dynamically -->
@@ -549,82 +532,79 @@
     <script>
         const monthsList = ['JUNE', 'JULY', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC', 'JAN', 'FEB', 'MAR'];
 
-        // Initial default students from uploaded PDFs
         const defaultStudents = [
             // LKG
-            { id: 101, name: 'MUHAMMED RAYHAN', classStd: 'LKG', phone: '9847123456', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 102, name: 'MISNA FATHIMA CK', classStd: 'LKG', phone: '9847123457', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 103, name: 'MUHAMMED HAMDAN K', classStd: 'LKG', phone: '9847123458', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 104, name: 'MUHAMMED ZAYAN N', classStd: 'LKG', phone: '9847123459', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 105, name: 'MUHAMMED RAYAN V', classStd: 'LKG', phone: '9847123460', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 106, name: 'FATHIMA HENZA', classStd: 'LKG', phone: '9847123461', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 107, name: 'FATHIMA LIYA V', classStd: 'LKG', phone: '9847123462', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 108, name: 'ZAYAN E K', classStd: 'LKG', phone: '9847123463', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 109, name: 'AMEENA', classStd: 'LKG', phone: '9847123464', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 101, name: 'MUHAMMED RAYHAN', classStd: 'LKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 102, name: 'MISNA FATHIMA CK', classStd: 'LKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 103, name: 'MUHAMMED HAMDAN K', classStd: 'LKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 104, name: 'MUHAMMED ZAYAN N', classStd: 'LKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 105, name: 'MUHAMMED RAYAN V', classStd: 'LKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 106, name: 'FATHIMA HENZA', classStd: 'LKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 107, name: 'FATHIMA LIYA V', classStd: 'LKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 108, name: 'ZAYAN E K', classStd: 'LKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 109, name: 'AMEENA', classStd: 'LKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             
             // UKG
-            { id: 201, name: 'AYISHA NOURIN V', classStd: 'UKG', phone: '9847223456', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 202, name: 'RIFA FATHIMA', classStd: 'UKG', phone: '9847223457', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 203, name: 'ADHIJITH', classStd: 'UKG', phone: '9847223458', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 204, name: 'RAJIH ALI', classStd: 'UKG', phone: '9847223459', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 205, name: 'MUHAMMED HISHAN', classStd: 'UKG', phone: '9847223460', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 206, name: 'MUHAMMED HASHIR CM', classStd: 'UKG', phone: '9847223461', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 207, name: 'HAMBALA BATHOOL', classStd: 'UKG', phone: '9847223462', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 208, name: 'MUHAMMED HAMDAN', classStd: 'UKG', phone: '9847223463', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 209, name: 'FATHIMA NUHA', classStd: 'UKG', phone: '9847223464', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 210, name: 'MUHAMMED HASHIR CK', classStd: 'UKG', phone: '9847223465', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 211, name: 'RUDRA V', classStd: 'UKG', phone: '9847223466', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 201, name: 'AYISHA NOURIN V', classStd: 'UKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 202, name: 'RIFA FATHIMA', classStd: 'UKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 203, name: 'ADHIJITH', classStd: 'UKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 204, name: 'RAJIH ALI', classStd: 'UKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 205, name: 'MUHAMMED HISHAN', classStd: 'UKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 206, name: 'MUHAMMED HASHIR CM', classStd: 'UKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 207, name: 'HAMBALA BATHOOL', classStd: 'UKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 208, name: 'MUHAMMED HAMDAN', classStd: 'UKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 209, name: 'FATHIMA NUHA', classStd: 'UKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 210, name: 'MUHAMMED HASHIR CK', classStd: 'UKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 211, name: 'RUDRA V', classStd: 'UKG', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
 
             // STANDARD-1
-            { id: 301, name: 'NASHWA FATHIMA', classStd: 'STANDARD-1', phone: '9847323456', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 302, name: 'FATHIMA MARJANA', classStd: 'STANDARD-1', phone: '9847323457', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 303, name: 'MUHAMMED AMEEN', classStd: 'STANDARD-1', phone: '9847323458', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 304, name: 'FATHIMA ISHA V', classStd: 'STANDARD-1', phone: '9847323459', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 305, name: 'AYISHA RIYA C', classStd: 'STANDARD-1', phone: '9847323460', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 306, name: 'FIDHA FATHIMA', classStd: 'STANDARD-1', phone: '9847323461', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 307, name: 'FATHIMA RAZANA N', classStd: 'STANDARD-1', phone: '9847323462', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 308, name: 'FATHIMA HIBA', classStd: 'STANDARD-1', phone: '9847323463', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 309, name: 'MUHAMMED RIZWAN AR', classStd: 'STANDARD-1', phone: '9847323464', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 301, name: 'NASHWA FATHIMA', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 302, name: 'FATHIMA MARJANA', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 303, name: 'MUHAMMED AMEEN', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 304, name: 'FATHIMA ISHA V', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 305, name: 'AYISHA RIYA C', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 306, name: 'FIDHA FATHIMA', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 307, name: 'FATHIMA RAZANA N', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 308, name: 'FATHIMA HIBA', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 309, name: 'MUHAMMED RIZWAN AR', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
 
             // STANDARD-2
-            { id: 401, name: 'MUHAMMAD RIZWAN', classStd: 'STANDARD-2', phone: '9847423456', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 402, name: 'ARYANANDA', classStd: 'STANDARD-2', phone: '9847423457', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 403, name: 'FATHIMA MUFEEDHA', classStd: 'STANDARD-2', phone: '9847423458', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 404, name: 'MUHAMMED THAMEEM', classStd: 'STANDARD-2', phone: '9847423459', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 405, name: 'MUHAMMED SHAHABAS', classStd: 'STANDARD-2', phone: '9847423460', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 406, name: 'NISHBA FATHIMA', classStd: 'STANDARD-2', phone: '9847423461', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 407, name: 'ALYNA FATHIMA', classStd: 'STANDARD-2', phone: '9847423462', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 408, name: 'FATHIMA MEHRIN', classStd: 'STANDARD-2', phone: '9847423463', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 401, name: 'MUHAMMAD RIZWAN', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 402, name: 'ARYANANDA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 403, name: 'FATHIMA MUFEEDHA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 404, name: 'MUHAMMED THAMEEM', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 405, name: 'MUHAMMED SHAHABAS', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 406, name: 'NISHBA FATHIMA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 407, name: 'ALYNA FATHIMA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 408, name: 'FATHIMA MEHRIN', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
 
             // STANDARD-3
-            { id: 501, name: 'MUHAMMED MINHAJ P', classStd: 'STANDARD-3', phone: '9847523456', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 502, name: 'MINHA FATHIMA P', classStd: 'STANDARD-3', phone: '9847523457', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 503, name: 'FATHIMA RIFA', classStd: 'STANDARD-3', phone: '9847523458', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 504, name: 'FATHIMA AFILA', classStd: 'STANDARD-3', phone: '9847523459', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 505, name: 'MUHAMMED HISHAM', classStd: 'STANDARD-3', phone: '9847523460', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 506, name: 'MUHAMMED MUSTHAFA', classStd: 'STANDARD-3', phone: '9847523461', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 507, name: 'MUHAMMED MINHAJ N F', classStd: 'STANDARD-3', phone: '9847523462', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 508, name: 'ALEENA FATHIMA', classStd: 'STANDARD-3', phone: '9847523463', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 509, name: 'MUHAMMED SHAMMAS', classStd: 'STANDARD-3', phone: '9847523464', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 510, name: 'RIDHA FATHIMA N', classStd: 'STANDARD-3', phone: '9847523465', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 501, name: 'MUHAMMED MINHAJ P', classStd: 'STANDARD-3', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 502, name: 'MINHA FATHIMA P', classStd: 'STANDARD-3', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 503, name: 'FATHIMA RIFA', classStd: 'STANDARD-3', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 504, name: 'FATHIMA AFILA', classStd: 'STANDARD-3', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 505, name: 'MUHAMMED HISHAM', classStd: 'STANDARD-3', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 506, name: 'MUHAMMED MUSTHAFA', classStd: 'STANDARD-3', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 507, name: 'MUHAMMED MINHAJ N F', classStd: 'STANDARD-3', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 508, name: 'ALEENA FATHIMA', classStd: 'STANDARD-3', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 509, name: 'MUHAMMED SHAMMAS', classStd: 'STANDARD-3', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 510, name: 'RIDHA FATHIMA N', classStd: 'STANDARD-3', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
 
             // STANDARD-4
-            { id: 601, name: 'SILVA FATHIMA', classStd: 'STANDARD-4', phone: '9847623456', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 602, name: 'MINYA FATHIMA', classStd: 'STANDARD-4', phone: '9847623457', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 603, name: 'HISANA FATHIMA CK', classStd: 'STANDARD-4', phone: '9847623458', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 604, name: 'AJWA FATHIMA T P', classStd: 'STANDARD-4', phone: '9847623459', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 605, name: 'MUHAMMED RIZAN C', classStd: 'STANDARD-4', phone: '9847623460', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 606, name: 'MUHAMMED SHARIF MC', classStd: 'STANDARD-4', phone: '9847623461', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 607, name: 'MUHAMMED RAIHAN N', classStd: 'STANDARD-4', phone: '9847623462', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 608, name: 'ABDULLA MINHAJ CT', classStd: 'STANDARD-4', phone: '9847623463', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 609, name: 'MUHAMMED HASHIM V', classStd: 'STANDARD-4', phone: '9847623464', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 610, name: 'AHMAD NAJIL V', classStd: 'STANDARD-4', phone: '9847623465', paidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 611, name: 'NIYA FATHIMA K P', classStd: 'STANDARD-4', phone: '9847623466', paidMonths: ['JUNE', 'JULY', 'AUG'] }
+            { id: 601, name: 'SILVA FATHIMA', classStd: 'STANDARD-4', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 602, name: 'MINYA FATHIMA', classStd: 'STANDARD-4', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 603, name: 'HISANA FATHIMA CK', classStd: 'STANDARD-4', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 604, name: 'AJWA FATHIMA T P', classStd: 'STANDARD-4', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 605, name: 'MUHAMMED RIZAN C', classStd: 'STANDARD-4', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 606, name: 'MUHAMMED SHARIF MC', classStd: 'STANDARD-4', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 607, name: 'MUHAMMED RAIHAN N', classStd: 'STANDARD-4', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 608, name: 'ABDULLA MINHAJ CT', classStd: 'STANDARD-4', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 609, name: 'MUHAMMED HASHIM V', classStd: 'STANDARD-4', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 610, name: 'AHMAD NAJIL V', classStd: 'STANDARD-4', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 611, name: 'NIYA FATHIMA K P', classStd: 'STANDARD-4', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] }
         ];
 
-        let defaultParents = [
-            { username: 'parent1', password: '123', parentName: 'Ramesh Kumar', studentName: 'MUHAMMED RAYHAN', classStd: 'LKG', phone: '9847123456', studentId: 101 }
-        ];
+        let defaultParents = [];
 
         let students = JSON.parse(localStorage.getItem('glps_bus_students')) || defaultStudents;
         let registeredParents = JSON.parse(localStorage.getItem('glps_bus_parents')) || defaultParents;
@@ -690,6 +670,7 @@
             const formTeacher = document.getElementById('form-teacher');
             const formParent = document.getElementById('form-parent');
             hideError();
+            hideSuccess();
 
             btnAdmin.className = "flex-1 py-3 rounded-xl text-slate-500 hover:text-slate-800 transition";
             btnTeacher.className = "flex-1 py-3 rounded-xl text-slate-500 hover:text-slate-800 transition";
@@ -715,6 +696,7 @@
             const loginBox = document.getElementById('parent-login-box');
             const signupBox = document.getElementById('parent-signup-box');
             hideError();
+            hideSuccess();
             if (mode === 'signup') {
                 loginBox.classList.add('hidden');
                 signupBox.classList.remove('hidden');
@@ -734,6 +716,18 @@
         function hideError() {
             const errDiv = document.getElementById('login-error');
             if (errDiv) errDiv.classList.add('hidden');
+        }
+
+        function showSuccess(msg) {
+            const succDiv = document.getElementById('login-success');
+            if (!succDiv) return;
+            succDiv.innerText = msg;
+            succDiv.classList.remove('hidden');
+        }
+
+        function hideSuccess() {
+            const succDiv = document.getElementById('login-success');
+            if (succDiv) succDiv.classList.add('hidden');
         }
 
         function handleAdminLogin(e) {
@@ -760,7 +754,6 @@
                 return;
             }
 
-            // Simple validation for class teacher login
             if (user && pass) {
                 currentUser = { type: 'teacher', classStd: classVal, name: `${classVal} Teacher (GLPS Mundekarad)` };
                 showDashboard();
@@ -772,8 +765,6 @@
         function handleParentSignup(e) {
             e.preventDefault();
             const parentName = document.getElementById('signup-parent-name').value.trim();
-            const studentName = document.getElementById('signup-student-name').value.trim();
-            const classStd = document.getElementById('signup-student-class').value;
             const phone = document.getElementById('signup-phone').value.trim();
             const username = document.getElementById('signup-username').value.trim();
             const password = document.getElementById('signup-password').value.trim();
@@ -783,34 +774,17 @@
                 return;
             }
 
-            let student = students.find(s => s.name.toLowerCase() === studentName.toLowerCase() && s.classStd === classStd);
-            if (!student) {
-                student = {
-                    id: Date.now(),
-                    name: studentName.toUpperCase(),
-                    classStd: classStd,
-                    phone: phone,
-                    paidMonths: ['JUNE', 'JULY', 'AUG']
-                };
-                students.push(student);
-            } else {
-                student.phone = phone;
-            }
-
             const newParent = {
                 username,
                 password,
                 parentName,
-                studentName: student.name,
-                classStd,
-                phone,
-                studentId: student.id
+                phone
             };
 
             registeredParents.push(newParent);
             saveToLocalStorage();
-            currentUser = { type: 'parent', studentId: student.id, name: student.name, classStd: student.classStd, phone: phone };
-            showDashboard();
+            showSuccess('Registration Successful! Your parent account has been successfully created. Please login below.');
+            toggleParentAuthMode('login');
         }
 
         function handleParentLogin(e) {
@@ -820,7 +794,7 @@
 
             const found = registeredParents.find(rp => rp.username === u && rp.password === p);
             if (found) {
-                currentUser = { type: 'parent', studentId: found.studentId, name: found.studentName, classStd: found.classStd, phone: found.phone };
+                currentUser = { type: 'parent', name: found.parentName, phone: found.phone };
                 showDashboard();
             } else {
                 showError('Invalid parent username or password! Please check or Sign Up.');
@@ -858,8 +832,10 @@
             } else {
                 document.getElementById('parent-dashboard').classList.remove('hidden');
                 document.getElementById('parent-welcome-name').innerText = currentUser.name;
-                document.getElementById('parent-welcome-class').innerText = currentUser.classStd;
-                renderParentFeeStatus();
+                document.getElementById('parent-search-class').value = "";
+                document.getElementById('parent-search-input').value = "";
+                document.getElementById('parent-search-results-box').innerHTML = `<p class="text-xs text-slate-400 text-center">Please select class and type 3-4 letters of student name above.</p>`;
+                document.getElementById('download-parent-pdf-btn').classList.add('hidden');
             }
         }
 
@@ -887,6 +863,7 @@
             if (grid) grid.className = "grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto py-4";
 
             hideError();
+            hideSuccess();
         }
 
         function openBusFeeModal() {
@@ -975,25 +952,139 @@
             });
         }
 
-        function renderParentFeeStatus() {
-            const container = document.getElementById('parent-fee-status-container');
-            if (!container) return;
-            const student = students.find(s => s.id === currentUser.studentId);
-            if (!student) return;
+        let selectedParentSearchedStudent = null;
 
-            container.innerHTML = '';
-            monthsList.forEach(m => {
-                const isPaid = student.paidMonths.includes(m);
-                const badge = isPaid 
-                    ? `<span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold">Paid</span>`
-                    : `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">Due / Pending</span>`;
-                
-                container.innerHTML += `
-                    <div class="flex justify-between items-center p-3 bg-slate-50 rounded-2xl text-sm border border-slate-100">
-                        <span class="font-semibold text-slate-700">${m} 2026-27</span>
-                        ${badge}
+        function resetParentSearchBox() {
+            document.getElementById('parent-search-input').value = '';
+            document.getElementById('parent-search-results-box').innerHTML = `<p class="text-xs text-slate-400 text-center">Please select class and type 3-4 letters of student name above.</p>`;
+            document.getElementById('download-parent-pdf-btn').classList.add('hidden');
+            selectedParentSearchedStudent = null;
+        }
+
+        function filterParentSearchStudents() {
+            const cls = document.getElementById('parent-search-class').value;
+            const query = document.getElementById('parent-search-input').value.trim().toLowerCase();
+            const box = document.getElementById('parent-search-results-box');
+            const pdfBtn = document.getElementById('download-parent-pdf-btn');
+
+            if (!cls) {
+                box.innerHTML = `<p class="text-xs text-amber-600 text-center font-medium">Please select a class first.</p>`;
+                pdfBtn.classList.add('hidden');
+                return;
+            }
+
+            if (!query || query.length < 3) {
+                box.innerHTML = `<p class="text-xs text-slate-400 text-center">Type at least 3-4 letters of student name...</p>`;
+                pdfBtn.classList.add('hidden');
+                return;
+            }
+
+            const classStudents = students.filter(s => s.classStd === cls);
+            const filtered = classStudents.filter(s => s.name.toLowerCase().includes(query));
+
+            if (filtered.length === 0) {
+                box.innerHTML = `<p class="text-xs text-red-500 text-center font-medium">No matching student found in ${cls}.</p>`;
+                pdfBtn.classList.add('hidden');
+                return;
+            }
+
+            box.innerHTML = '';
+            filtered.forEach(s => {
+                box.innerHTML += `
+                    <div onclick="selectParentSearchedStudent(${s.id})" class="p-3 bg-white rounded-xl border border-slate-200 hover:border-indigo-500 cursor-pointer transition flex justify-between items-center">
+                        <div>
+                            <p class="font-bold text-slate-800 text-sm">${s.name} (${s.classStd})</p>
+                            <p class="text-xs text-slate-500">Paid: ${s.paidMonths.join(', ')}</p>
+                        </div>
+                        <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-lg text-xs font-semibold">Select</span>
                     </div>
                 `;
+            });
+        }
+
+        function selectParentSearchedStudent(id) {
+            const s = students.find(st => st.id === id);
+            if (!s) return;
+            selectedParentSearchedStudent = s;
+
+            const box = document.getElementById('parent-search-results-box');
+            const pdfBtn = document.getElementById('download-parent-pdf-btn');
+
+            let monthsHTML = '';
+            monthsList.forEach(m => {
+                const isPaid = s.paidMonths.includes(m);
+                monthsHTML += `
+                    <div class="flex justify-between items-center p-2 bg-white rounded-lg border text-xs">
+                        <span class="font-bold text-slate-700">${m}</span>
+                        <span class="px-2 py-0.5 rounded font-semibold ${isPaid ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}">${isPaid ? 'PAID' : 'DUE'}</span>
+                    </div>
+                `;
+            });
+
+            box.innerHTML = `
+                <div class="p-4 bg-indigo-50 rounded-2xl border border-indigo-200 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="brand-title font-bold text-slate-800 text-base">${s.name}</h4>
+                            <p class="text-xs text-indigo-700 font-semibold">Class: ${s.classStd} | Phone: ${s.phone || 'N/A'}</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                        ${monthsHTML}
+                    </div>
+                </div>
+            `;
+            pdfBtn.classList.remove('hidden');
+        }
+
+        function downloadParentSearchedPDF() {
+            if (!selectedParentSearchedStudent) return;
+            const s = selectedParentSearchedStudent;
+            const repBody = document.getElementById('pdf-rep-body');
+            document.getElementById('pdf-rep-title').innerText = `FEE STATEMENT FOR ${s.name} (${s.classStd})`;
+
+            let gridHTML = '';
+            monthsList.forEach(m => {
+                const isPaid = s.paidMonths.includes(m);
+                gridHTML += `
+                    <tr>
+                        <td style="border: 1px solid #cbd5e1; padding: 6px; font-weight: bold;">${m} 2026-27</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center; font-weight: bold; color: ${isPaid ? '#059669' : '#dc2626'};">${isPaid ? 'PAID' : 'DUE / PENDING'}</td>
+                    </tr>
+                `;
+            });
+
+            repBody.innerHTML = `
+                <p><b>Date:</b> ${new Date().toLocaleDateString('en-GB')}</p>
+                <p><b>Parent Phone:</b> ${s.phone || 'N/A'}</p>
+                <hr style="margin: 12px 0; border: 1px solid #e2e8f0;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 15px;">
+                    <thead>
+                        <tr style="background: #f1f5f9;">
+                            <th style="border: 1px solid #cbd5e1; padding: 6px; text-align: left;">Month</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${gridHTML}
+                    </tbody>
+                </table>
+                <div style="background: #ecfdf5; padding: 12px; border-radius: 8px; text-align: right;">
+                    <h3 style="color: #065f46; margin: 0; font-size: 14px;">Total Paid: ₹${s.paidMonths.length * 350} (${s.paidMonths.length} Months)</h3>
+                </div>
+            `;
+
+            const element = document.getElementById('pdf-report-template');
+            element.style.display = 'block';
+            const opt = {
+                margin:       10,
+                filename:     `Fee_Statement_${s.name.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save().then(() => {
+                element.style.display = 'none';
             });
         }
 
@@ -1094,7 +1185,7 @@
             const studentId = document.getElementById('fee-student-select').value;
             const student = students.find(s => s.id == studentId);
             if (student) {
-                document.getElementById('fee-parent-phone').value = student.phone;
+                document.getElementById('fee-parent-phone').value = student.phone || '';
             }
         }
 
@@ -1146,39 +1237,6 @@
             if (isDirectoryVisible) {
                 renderStudentsTable();
             }
-        }
-
-        function downloadParentPDFReport() {
-            const student = students.find(s => s.id === currentUser.studentId);
-            if (!student) return;
-
-            const unpaidMonths = monthsList.filter(m => !student.paidMonths.includes(m));
-            const repBody = document.getElementById('pdf-rep-body');
-            document.getElementById('pdf-rep-title').innerText = `FEE STATEMENT FOR ${student.name} (${student.classStd})`;
-
-            repBody.innerHTML = `
-                <p><b>Date:</b> ${new Date().toLocaleDateString('en-GB')}</p>
-                <p><b>Parent Phone:</b> ${student.phone || currentUser.phone}</p>
-                <hr style="margin: 15px 0; border: 1px solid #e2e8f0;">
-                <p style="font-size: 16px;"><b>Paid Months:</b> <span style="color: #059669; font-weight: bold;">${student.paidMonths.join(', ')}</span></p>
-                <p style="font-size: 16px;"><b>Remaining Dues:</b> <span style="color: #dc2626; font-weight: bold;">${unpaidMonths.length > 0 ? unpaidMonths.join(', ') : 'None (Fully Paid)'}</span></p>
-                <div style="background: #ecfdf5; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: right;">
-                    <h3 style="color: #065f46; margin: 0;">Total Paid: ₹${student.paidMonths.length * 350}</h3>
-                </div>
-            `;
-
-            const element = document.getElementById('pdf-report-template');
-            element.style.display = 'block';
-            const opt = {
-                margin:       10,
-                filename:     `Bus_Fee_Statement_${student.name.replace(/\s+/g, '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().from(element).set(opt).save().then(() => {
-                element.style.display = 'none';
-            });
         }
 
         function openBusExpenseModal() {
@@ -1364,10 +1422,10 @@
                 const isPaid = s.paidMonths.includes(selectedMonth);
                 studentRowsHTML += `
                     <tr>
-                        <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">${idx + 1}</td>
-                        <td style="border: 1px solid #cbd5e1; padding: 6px;">${s.name}</td>
-                        <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">${s.classStd}</td>
-                        <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center; font-weight: bold; color: ${isPaid ? '#059669' : '#dc2626'};">${isPaid ? 'PAID' : 'DUE'}</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 5px; text-align: center;">${idx + 1}</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 5px;">${s.name}</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 5px; text-align: center;">${s.classStd}</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 5px; text-align: center; font-weight: bold; color: ${isPaid ? '#059669' : '#dc2626'};">${isPaid ? 'PAID' : 'DUE'}</td>
                     </tr>
                 `;
             });
@@ -1403,10 +1461,10 @@
                         <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
                             <thead>
                                 <tr style="background: #f1f5f9;">
-                                    <th style="border: 1px solid #cbd5e1; padding: 6px;">#</th>
-                                    <th style="border: 1px solid #cbd5e1; padding: 6px;">Student Name</th>
-                                    <th style="border: 1px solid #cbd5e1; padding: 6px;">Class</th>
-                                    <th style="border: 1px solid #cbd5e1; padding: 6px;">Status</th>
+                                    <th style="border: 1px solid #cbd5e1; padding: 5px;">#</th>
+                                    <th style="border: 1px solid #cbd5e1; padding: 5px;">Student Name</th>
+                                    <th style="border: 1px solid #cbd5e1; padding: 5px;">Class</th>
+                                    <th style="border: 1px solid #cbd5e1; padding: 5px;">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
