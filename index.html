@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Bus App - GLPS MUNDEKARAD</title>
-    <!-- PWA & Mobile Home Screen Manifest & Icons -->
     <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22School%20Bus%20App%20GLPS%20Mundekarad%22%2C%22short_name%22%3A%22BusApp%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f172a%22%2C%22theme_color%22%3A%22%234f46e5%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fapi.iconify.design%2Ffa6-solid%3Abus.svg%3Fcolor%3D%23ffffff%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%5D%7D">
     <meta name="theme-color" content="#4f46e5">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -51,6 +50,15 @@
         </div>
     </header>
 
+    <!-- iOS Install Banner Guide -->
+    <div id="ios-install-banner" class="hidden bg-indigo-600 text-white px-4 py-3 shadow-md relative z-40 text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-between gap-2 border-b border-indigo-500">
+        <div class="flex items-center space-x-2 text-center sm:text-left">
+            <i class="fa-solid fa-mobile-screen-button text-lg text-amber-300"></i>
+            <span><b>iPhone / iOS User?</b> Tap the <i class="fa-solid fa-arrow-up-from-bracket inline px-1"></i> <b>Share</b> button in Safari, then select <i class="fa-solid fa-square-plus inline px-1"></i> <b>"Add to Home Screen"</b> to use as an App!</span>
+        </div>
+        <button onclick="dismissIosBanner()" class="bg-indigo-900 hover:bg-indigo-950 px-3 py-1 rounded-lg text-xs font-bold transition">Got it</button>
+    </div>
+
     <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6">
         
         <!-- Auth Container -->
@@ -76,7 +84,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Username</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-user"></i></span>
-                            <input type="text" id="admin-user" required placeholder="Enter admin username" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                            <input type="text" id="admin-user" required placeholder="Enter username" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
                         </div>
                     </div>
                     <div>
@@ -581,7 +589,7 @@
             { id: 308, name: 'FATHIMA HIBA', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 309, name: 'MUHAMMED RIZWAN AR', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
 
-            // STANDARD-2 (Updated with exact uploaded PDF list)
+            // STANDARD-2 (Updated exact uploaded PDF list with Alyna Fathima)
             { id: 401, name: 'MUHAMMAD RIZWAN', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 402, name: 'ARYANANDA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 403, name: 'FATHIMA MUFEEDHA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
@@ -641,7 +649,22 @@
             if (dateInput) dateInput.value = todayStr;
             const expDateInput = document.getElementById('exp-date');
             if (expDateInput) expDateInput.value = todayStr;
+
+            // Check if iOS to show install banner
+            const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+            const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
+            if (isIos && !isInStandaloneMode) {
+                const dismissed = localStorage.getItem('glps_ios_banner_dismissed');
+                if (!dismissed) {
+                    document.getElementById('ios-install-banner').classList.remove('hidden');
+                }
+            }
         };
+
+        function dismissIosBanner() {
+            document.getElementById('ios-install-banner').classList.add('hidden');
+            localStorage.setItem('glps_ios_banner_dismissed', 'true');
+        }
 
         function populateReportMonthDropdown() {
             const select = document.getElementById('report-month-select');
