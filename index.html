@@ -1005,11 +1005,26 @@
                 margin:       10,
                 filename:     `Fee_Statement_${s.name.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
+                html2canvas:  { scale: 2, useCORS: true },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-            html2pdf().from(element).set(opt).save().then(() => {
+            
+            // Mobile app safe download handler
+            html2pdf().from(element).set(opt).outputPdf('blob').then((pdfBlob) => {
                 element.style.display = 'none';
+                const blobUrl = URL.createObjectURL(pdfBlob);
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = `Fee_Statement_${s.name.replace(/\s+/g, '_')}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(blobUrl);
+                }, 100);
+            }).catch(() => {
+                element.style.display = 'none';
+                html2pdf().from(element).set(opt).save();
             });
         }
 
@@ -1503,11 +1518,26 @@
                 margin:       10,
                 filename:     `GLPS_Bus_Report_${selectedMonth}_${selectedClass}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
+                html2canvas:  { scale: 2, useCORS: true },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-            html2pdf().from(element).set(opt).save().then(() => {
+
+            // Mobile app safe download handler
+            html2pdf().from(element).set(opt).outputPdf('blob').then((pdfBlob) => {
                 element.style.display = 'none';
+                const blobUrl = URL.createObjectURL(pdfBlob);
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = `GLPS_Bus_Report_${selectedMonth}_${selectedClass}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(blobUrl);
+                }, 100);
+            }).catch(() => {
+                element.style.display = 'none';
+                html2pdf().from(element).set(opt).save();
             });
         }
     </script>
