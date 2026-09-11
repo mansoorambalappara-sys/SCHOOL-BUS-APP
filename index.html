@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Bus App - GLPS MUNDEKARAD</title>
+    
+    <!-- PWA Web App Manifest & iOS Meta Tags -->
     <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22School%20Bus%20App%20GLPS%20Mundekarad%22%2C%22short_name%22%3A%22BusApp%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f172a%22%2C%22theme_color%22%3A%22%234f46e5%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fapi.iconify.design%2Ffa6-solid%3Abus.svg%3Fcolor%3D%23ffffff%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%5D%7D">
     <meta name="theme-color" content="#4f46e5">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,20 +13,29 @@
     <meta name="apple-mobile-web-app-title" content="GLPS Bus App">
     <link rel="apple-touch-icon" href="https://api.iconify.design/fa6-solid:bus.svg?color=%234f46e5">
     
+    <!-- Tailwind CSS and FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- html2pdf.js bundle for A4 PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
         body { font-family: 'Inter', sans-serif; }
         .brand-title { font-family: 'Outfit', sans-serif; }
-        .btn-3d {
-            transition: all 0.15s ease;
-            box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+        
+        /* 3D Square Curved Colorful Buttons */
+        .btn-3d-square {
+            aspect-ratio: 1 / 1;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border-bottom-width: 6px;
         }
-        .btn-3d:active {
-            transform: translateY(3px);
-            box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.3);
+        .btn-3d-square:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.15);
+            border-bottom-width: 2px;
         }
     </style>
 </head>
@@ -50,7 +61,6 @@
         </div>
     </header>
 
-    <!-- iOS Install Banner Guide -->
     <div id="ios-install-banner" class="hidden bg-indigo-600 text-white px-4 py-3 shadow-md relative z-40 text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-between gap-2 border-b border-indigo-500">
         <div class="flex items-center space-x-2 text-center sm:text-left">
             <i class="fa-solid fa-mobile-screen-button text-lg text-amber-300"></i>
@@ -179,44 +189,45 @@
             </div>
         </div>
 
-        <div id="admin-dashboard" class="hidden space-y-8">
+        <div id="admin-dashboard" class="hidden space-y-8 max-w-4xl mx-auto py-4">
             <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 text-center">
                 <h2 id="dashboard-title" class="brand-title text-2xl font-extrabold text-slate-800">Control Center</h2>
                 <p class="text-sm text-slate-500 mt-1">GLPS MUNDEKARAD School Bus Operations & Financials</p>
             </div>
 
-            <div id="admin-buttons-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto py-4">
+            <!-- 3 Colorful Square 3D Curved Buttons with Spacing -->
+            <div id="admin-buttons-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-6 px-4 py-2">
                 
-                <!-- Button 1: Bus Fee Management -->
-                <button onclick="openBusFeeModal()" class="btn-3d bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-8 rounded-3xl flex flex-col items-center justify-center space-y-4 border-b-8 border-teal-900 group hover:scale-[1.02]">
-                    <div class="bg-white/20 p-4 rounded-2xl group-hover:bg-white/30 transition">
+                <!-- Button 1: Bus Fee Management (Emerald/Teal 3D) -->
+                <button onclick="openBusFeeModal()" class="btn-3d-square bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-6 rounded-3xl flex flex-col items-center justify-center space-y-3 border-teal-900 group hover:scale-[1.03]">
+                    <div class="bg-white/20 p-4 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
                         <i class="fa-solid fa-indian-rupee-sign text-4xl"></i>
                     </div>
                     <div class="text-center">
-                        <h3 class="brand-title text-xl font-bold tracking-wide">Bus Fee Management</h3>
+                        <h3 class="brand-title text-lg font-bold tracking-wide">Bus Fee Management</h3>
                         <p class="text-xs text-emerald-100 mt-1 font-medium">Collect fees, directory & PDF receipt</p>
                     </div>
                 </button>
 
-                <!-- Button 2: Bus Expense Management -->
-                <button id="btn-expense" onclick="openBusExpenseModal()" class="btn-3d bg-gradient-to-br from-amber-500 to-orange-700 text-white p-8 rounded-3xl flex flex-col items-center justify-center space-y-4 border-b-8 border-orange-900 group hover:scale-[1.02]">
-                    <div class="bg-white/20 p-4 rounded-2xl group-hover:bg-white/30 transition">
+                <!-- Button 2: Bus Expense Management (Amber/Orange 3D) -->
+                <button id="btn-expense" onclick="openBusExpenseModal()" class="btn-3d-square bg-gradient-to-br from-amber-500 to-orange-700 text-white p-6 rounded-3xl flex flex-col items-center justify-center space-y-3 border-orange-900 group hover:scale-[1.03]">
+                    <div class="bg-white/20 p-4 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
                         <i class="fa-solid fa-file-invoice-dollar text-4xl"></i>
                     </div>
                     <div class="text-center">
-                        <h3 class="brand-title text-xl font-bold tracking-wide">Bus Expense Management</h3>
-                        <p class="text-xs text-amber-100 mt-1 font-medium">Salary, diesel, service & other expenses</p>
+                        <h3 class="brand-title text-lg font-bold tracking-wide">Bus Expense Management</h3>
+                        <p class="text-xs text-amber-100 mt-1 font-medium">Salary, diesel, service & expenses</p>
                     </div>
                 </button>
 
-                <!-- Button 3: Monthly Report / Class Fee Report -->
-                <button id="btn-report" onclick="openMonthlyReportModal()" class="btn-3d bg-gradient-to-br from-indigo-600 to-purple-800 text-white p-8 rounded-3xl flex flex-col items-center justify-center space-y-4 border-b-8 border-purple-950 group hover:scale-[1.02]">
-                    <div class="bg-white/20 p-4 rounded-2xl group-hover:bg-white/30 transition">
+                <!-- Button 3: Monthly Report (Indigo/Purple 3D) -->
+                <button id="btn-report" onclick="openMonthlyReportModal()" class="btn-3d-square bg-gradient-to-br from-indigo-600 to-purple-800 text-white p-6 rounded-3xl flex flex-col items-center justify-center space-y-3 border-purple-950 group hover:scale-[1.03]">
+                    <div class="bg-white/20 p-4 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
                         <i class="fa-solid fa-chart-pie text-4xl"></i>
                     </div>
                     <div class="text-center">
-                        <h3 id="btn-report-title" class="brand-title text-xl font-bold tracking-wide">Monthly Report</h3>
-                        <p id="btn-report-desc" class="text-xs text-indigo-100 mt-1 font-medium">View collections, dues, salary & expense summary</p>
+                        <h3 id="btn-report-title" class="brand-title text-lg font-bold tracking-wide">Monthly Report</h3>
+                        <p id="btn-report-desc" class="text-xs text-indigo-100 mt-1 font-medium">Collections, dues & expenses summary</p>
                     </div>
                 </button>
 
@@ -256,7 +267,7 @@
                 </div>
 
                 <div class="pt-2">
-                    <button onclick="downloadParentSearchedPDF()" id="download-parent-pdf-btn" class="hidden btn-3d w-full bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-4 rounded-2xl flex items-center justify-center space-x-2 font-bold shadow">
+                    <button onclick="downloadParentSearchedPDF()" id="download-parent-pdf-btn" class="hidden w-full bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-4 rounded-2xl flex items-center justify-center space-x-2 font-bold shadow transition hover:opacity-95">
                         <i class="fa-solid fa-file-pdf text-xl"></i>
                         <span>Download A4 PDF Fee Statement</span>
                     </button>
@@ -382,7 +393,6 @@
         </div>
     </div>
 
-    <!-- Add/Edit Student Modal -->
     <div id="add-student-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4">
             <div class="flex justify-between items-center">
@@ -418,7 +428,6 @@
         </div>
     </div>
 
-    <!-- Bus Expense Modal -->
     <div id="bus-expense-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center">
@@ -489,7 +498,6 @@
         </div>
     </div>
 
-    <!-- Monthly Report Modal -->
     <div id="monthly-report-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center border-b pb-3">
@@ -531,7 +539,6 @@
         </div>
     </div>
 
-    <!-- Hidden A4 PDF Report Template -->
     <div style="display:none;">
         <div id="pdf-report-template" style="padding: 20px; font-family: 'Inter', sans-serif; background: #ffffff; width: 750px; color: #1e293b; box-sizing: border-box;">
             <div style="text-align: center; border-bottom: 3px solid #4f46e5; padding-bottom: 12px; margin-bottom: 15px;">
@@ -589,7 +596,7 @@
             { id: 308, name: 'FATHIMA HIBA', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 309, name: 'MUHAMMED RIZWAN AR', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
 
-            // STANDARD-2 (Updated exact uploaded PDF list with Alyna Fathima)
+            // STANDARD-2 (Updated exact uploaded PDF list)
             { id: 401, name: 'MUHAMMAD RIZWAN', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 402, name: 'ARYANANDA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 403, name: 'FATHIMA MUFEEDHA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
@@ -858,13 +865,13 @@
                     if (btnExpense) btnExpense.style.display = 'none';
                     if (btnReportTitle) btnReportTitle.innerText = `${currentUser.classStd} Fee Report`;
                     if (btnReportDesc) btnReportDesc.innerText = `View and download A4 fee grid report for ${currentUser.classStd}`;
-                    if (grid) grid.className = "grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto py-4";
+                    if (grid) grid.className = "grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto px-4 py-2";
                 } else {
                     if (dashboardTitle) dashboardTitle.innerText = "Admin Control Center";
                     if (btnExpense) btnExpense.style.display = 'flex';
                     if (btnReportTitle) btnReportTitle.innerText = "Monthly Report";
                     if (btnReportDesc) btnReportDesc.innerText = "View collections, dues, salary & expense summary";
-                    if (grid) grid.className = "grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto py-4";
+                    if (grid) grid.className = "grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto px-4 py-2";
                 }
             } else {
                 document.getElementById('parent-dashboard').classList.remove('hidden');
@@ -897,7 +904,7 @@
             if (btnReportTitle) btnReportTitle.innerText = "Monthly Report";
             if (btnReportDesc) btnReportDesc.innerText = "View collections, dues, salary & expense summary";
             const grid = document.getElementById('admin-buttons-grid');
-            if (grid) grid.className = "grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto py-4";
+            if (grid) grid.className = "grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto px-4 py-2";
 
             hideError();
             hideSuccess();
