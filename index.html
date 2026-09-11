@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Bus App - GLPS MUNDEKARAD</title>
+    <!-- PWA & Mobile Home Screen Manifest & Icons -->
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22School%20Bus%20App%20GLPS%20Mundekarad%22%2C%22short_name%22%3A%22BusApp%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f172a%22%2C%22theme_color%22%3A%22%234f46e5%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fapi.iconify.design%2Ffa6-solid%3Abus.svg%3Fcolor%3D%23ffffff%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%5D%7D">
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="GLPS Bus App">
+    <link rel="apple-touch-icon" href="https://api.iconify.design/fa6-solid:bus.svg?color=%234f46e5">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -68,7 +76,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Username</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-user"></i></span>
-                            <input type="text" id="admin-user" required placeholder="Enter username" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                            <input type="text" id="admin-user" required placeholder="Enter admin username" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
                         </div>
                     </div>
                     <div>
@@ -178,7 +186,7 @@
                     </div>
                     <div class="text-center">
                         <h3 class="brand-title text-xl font-bold tracking-wide">Bus Fee Management</h3>
-                        <p class="text-xs text-emerald-100 mt-1 font-medium">Collect fees, directory & WhatsApp receipt</p>
+                        <p class="text-xs text-emerald-100 mt-1 font-medium">Collect fees, directory & PDF receipt</p>
                     </div>
                 </button>
 
@@ -366,6 +374,7 @@
         </div>
     </div>
 
+    <!-- Add/Edit Student Modal -->
     <div id="add-student-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4">
             <div class="flex justify-between items-center">
@@ -401,6 +410,7 @@
         </div>
     </div>
 
+    <!-- Bus Expense Modal -->
     <div id="bus-expense-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center">
@@ -471,6 +481,7 @@
         </div>
     </div>
 
+    <!-- Monthly Report Modal -->
     <div id="monthly-report-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center border-b pb-3">
@@ -512,6 +523,7 @@
         </div>
     </div>
 
+    <!-- Hidden A4 PDF Report Template -->
     <div style="display:none;">
         <div id="pdf-report-template" style="padding: 20px; font-family: 'Inter', sans-serif; background: #ffffff; width: 750px; color: #1e293b; box-sizing: border-box;">
             <div style="text-align: center; border-bottom: 3px solid #4f46e5; padding-bottom: 12px; margin-bottom: 15px;">
@@ -569,7 +581,7 @@
             { id: 308, name: 'FATHIMA HIBA', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 309, name: 'MUHAMMED RIZWAN AR', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
 
-            // STANDARD-2 (Updated with latest exact PDF)
+            // STANDARD-2 (Updated with exact uploaded PDF list)
             { id: 401, name: 'MUHAMMAD RIZWAN', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 402, name: 'ARYANANDA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 403, name: 'FATHIMA MUFEEDHA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
@@ -1009,7 +1021,7 @@
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             
-            // Mobile app safe download handler
+            // Mobile app safe download handler generating blob & triggering download
             html2pdf().from(element).set(opt).outputPdf('blob').then((pdfBlob) => {
                 element.style.display = 'none';
                 const blobUrl = URL.createObjectURL(pdfBlob);
@@ -1522,7 +1534,7 @@
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            // Mobile app safe download handler
+            // Mobile app safe download handler generating blob & triggering download
             html2pdf().from(element).set(opt).outputPdf('blob').then((pdfBlob) => {
                 element.style.display = 'none';
                 const blobUrl = URL.createObjectURL(pdfBlob);
