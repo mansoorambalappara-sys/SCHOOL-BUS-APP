@@ -45,6 +45,7 @@
 
     <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6">
         
+        <!-- Auth Container -->
         <div id="auth-container" class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 my-8">
             <div class="bg-gradient-to-br from-indigo-600 to-blue-700 p-6 text-white text-center">
                 <h2 class="brand-title text-2xl font-bold">Portal Login</h2>
@@ -192,7 +193,7 @@
                     </div>
                 </button>
 
-                <!-- Button 3: Monthly Report / Class Report -->
+                <!-- Button 3: Monthly Report / Class Fee Report -->
                 <button id="btn-report" onclick="openMonthlyReportModal()" class="btn-3d bg-gradient-to-br from-indigo-600 to-purple-800 text-white p-8 rounded-3xl flex flex-col items-center justify-center space-y-4 border-b-8 border-purple-950 group hover:scale-[1.02]">
                     <div class="bg-white/20 p-4 rounded-2xl group-hover:bg-white/30 transition">
                         <i class="fa-solid fa-chart-pie text-4xl"></i>
@@ -471,7 +472,7 @@
     </div>
 
     <div id="monthly-report-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-3xl w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] flex flex-col">
+        <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center border-b pb-3">
                 <h3 id="report-modal-heading" class="brand-title text-lg font-bold text-slate-800 flex items-center gap-2 text-indigo-700"><i class="fa-solid fa-chart-pie"></i> Monthly Financial & Fee Report</h3>
                 <button onclick="closeMonthlyReportModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -512,7 +513,7 @@
     </div>
 
     <div style="display:none;">
-        <div id="pdf-report-template" style="padding: 25px; font-family: 'Inter', sans-serif; background: #ffffff; width: 750px; color: #1e293b; max-height: 1100px; box-sizing: border-box;">
+        <div id="pdf-report-template" style="padding: 20px; font-family: 'Inter', sans-serif; background: #ffffff; width: 750px; color: #1e293b; box-sizing: border-box;">
             <div style="text-align: center; border-bottom: 3px solid #4f46e5; padding-bottom: 12px; margin-bottom: 15px;">
                 <h1 style="color: #4f46e5; font-size: 22px; font-weight: 800; margin: 0;">GLPS MUNDEKARAD</h1>
                 <p style="font-size: 12px; color: #475569; margin: 4px 0 0 0; font-weight: 600;" id="pdf-rep-title">OFFICIAL SCHOOL BUS FEE & FINANCIAL REPORT</p>
@@ -568,7 +569,7 @@
             { id: 308, name: 'FATHIMA HIBA', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 309, name: 'MUHAMMED RIZWAN AR', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
 
-            // STANDARD-2 (Updated with latest PDF)
+            // STANDARD-2 (Updated with latest exact PDF)
             { id: 401, name: 'MUHAMMAD RIZWAN', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 402, name: 'ARYANANDA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 403, name: 'FATHIMA MUFEEDHA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
@@ -945,11 +946,70 @@
                         <td class="p-3 text-xs text-slate-500 font-mono">${s.paidMonths.length > 0 ? s.paidMonths.join(', ') : 'None'}</td>
                         <td class="p-3">${statusBadge}</td>
                         <td class="p-3 text-right space-x-1">
+                            <button onclick="downloadStudentStatementPDF(${s.id})" class="text-emerald-600 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 p-2 rounded-xl transition" title="Download PDF Statement"><i class="fa-solid fa-file-pdf"></i></button>
                             <button onclick="openEditStudentModal(${s.id})" class="text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 p-2 rounded-xl transition" title="Edit Student"><i class="fa-solid fa-pen"></i></button>
                             <button onclick="deleteStudent(${s.id})" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-2 rounded-xl transition" title="Delete Student"><i class="fa-solid fa-trash-can"></i></button>
                         </td>
                     </tr>
                 `;
+            });
+        }
+
+        function downloadStudentStatementPDF(id) {
+            const s = students.find(st => st.id === id);
+            if (!s) return;
+            const repBody = document.getElementById('pdf-rep-body');
+            document.getElementById('pdf-rep-title').innerText = `FEE STATEMENT & STATUS FOR ${s.name} (${s.classStd})`;
+
+            let gridHTML = '';
+            monthsList.forEach(m => {
+                const isPaid = s.paidMonths.includes(m);
+                const isAlyna = s.name.includes('ALYNA FATHIMA') && ['JUNE', 'JULY', 'AUG'].includes(m);
+                const feeAmt = isAlyna ? '₹250' : '₹350';
+                gridHTML += `
+                    <tr>
+                        <td style="border: 1px solid #cbd5e1; padding: 6px; font-weight: bold;">${m} 2026-27</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center; font-weight: bold; color: ${isPaid ? '#059669' : '#dc2626'};">${isPaid ? 'PAID (' + feeAmt + ')' : 'DUE / PENDING'}</td>
+                    </tr>
+                `;
+            });
+
+            const totalPaidCount = s.paidMonths.length;
+            const isAlynaStudent = s.name.includes('ALYNA FATHIMA');
+            const totalPaidAmt = isAlynaStudent ? (totalPaidCount * 350 - 300) : (totalPaidCount * 350);
+
+            repBody.innerHTML = `
+                <p><b>Date:</b> ${new Date().toLocaleDateString('en-GB')}</p>
+                <p><b>Student Name:</b> ${s.name} | <b>Class:</b> ${s.classStd}</p>
+                <p><b>Parent Phone:</b> ${s.phone || 'N/A'}</p>
+                <hr style="margin: 12px 0; border: 1px solid #e2e8f0;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 15px;">
+                    <thead>
+                        <tr style="background: #f1f5f9;">
+                            <th style="border: 1px solid #cbd5e1; padding: 6px; text-align: left;">Month</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${gridHTML}
+                    </tbody>
+                </table>
+                <div style="background: #ecfdf5; padding: 12px; border-radius: 8px; text-align: right;">
+                    <h3 style="color: #065f46; margin: 0; font-size: 14px;">Total Paid: ₹${totalPaidAmt} (${totalPaidCount} Months)</h3>
+                </div>
+            `;
+
+            const element = document.getElementById('pdf-report-template');
+            element.style.display = 'block';
+            const opt = {
+                margin:       10,
+                filename:     `Fee_Statement_${s.name.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save().then(() => {
+                element.style.display = 'none';
             });
         }
 
@@ -1040,53 +1100,7 @@
 
         function downloadParentSearchedPDF() {
             if (!selectedParentSearchedStudent) return;
-            const s = selectedParentSearchedStudent;
-            const repBody = document.getElementById('pdf-rep-body');
-            document.getElementById('pdf-rep-title').innerText = `FEE STATEMENT FOR ${s.name} (${s.classStd})`;
-
-            let gridHTML = '';
-            monthsList.forEach(m => {
-                const isPaid = s.paidMonths.includes(m);
-                gridHTML += `
-                    <tr>
-                        <td style="border: 1px solid #cbd5e1; padding: 6px; font-weight: bold;">${m} 2026-27</td>
-                        <td style="border: 1px solid #cbd5e1; padding: 6px; text-align: center; font-weight: bold; color: ${isPaid ? '#059669' : '#dc2626'};">${isPaid ? 'PAID' : 'DUE / PENDING'}</td>
-                    </tr>
-                `;
-            });
-
-            repBody.innerHTML = `
-                <p><b>Date:</b> ${new Date().toLocaleDateString('en-GB')}</p>
-                <p><b>Parent Phone:</b> ${s.phone || 'N/A'}</p>
-                <hr style="margin: 12px 0; border: 1px solid #e2e8f0;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 15px;">
-                    <thead>
-                        <tr style="background: #f1f5f9;">
-                            <th style="border: 1px solid #cbd5e1; padding: 6px; text-align: left;">Month</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 6px; text-align: center;">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${gridHTML}
-                    </tbody>
-                </table>
-                <div style="background: #ecfdf5; padding: 12px; border-radius: 8px; text-align: right;">
-                    <h3 style="color: #065f46; margin: 0; font-size: 14px;">Total Paid: ₹${s.paidMonths.length * 350} (${s.paidMonths.length} Months)</h3>
-                </div>
-            `;
-
-            const element = document.getElementById('pdf-report-template');
-            element.style.display = 'block';
-            const opt = {
-                margin:       10,
-                filename:     `Fee_Statement_${s.name.replace(/\s+/g, '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().from(element).set(opt).save().then(() => {
-                element.style.display = 'none';
-            });
+            downloadStudentStatementPDF(selectedParentSearchedStudent.id);
         }
 
         function openAddStudentModal() {
@@ -1187,6 +1201,11 @@
             const student = students.find(s => s.id == studentId);
             if (student) {
                 document.getElementById('fee-parent-phone').value = student.phone || '';
+                if (student.name.includes('ALYNA FATHIMA')) {
+                    document.getElementById('fee-per-month').value = '250';
+                } else {
+                    document.getElementById('fee-per-month').value = '350';
+                }
             }
         }
 
@@ -1386,7 +1405,6 @@
 
             let feeCollectedCount = 0;
             let feePendingCount = 0;
-            const monthlyFeeRate = 350;
 
             targetStudents.forEach(s => {
                 if (s.paidMonths.includes(selectedMonth)) {
@@ -1395,9 +1413,6 @@
                     feePendingCount++;
                 }
             });
-
-            const totalFeeCollectedAmount = feeCollectedCount * monthlyFeeRate;
-            const totalFeePendingAmount = feePendingCount * monthlyFeeRate;
 
             let driverSalary = 0;
             let ayaSalary = 0;
@@ -1416,17 +1431,18 @@
             }
 
             const totalExpenses = driverSalary + ayaSalary + dieselExp + serviceExp + otherExp;
-            const netBalance = totalFeeCollectedAmount - totalExpenses;
 
             let studentRowsHTML = '';
             targetStudents.forEach((s, idx) => {
                 const isPaid = s.paidMonths.includes(selectedMonth);
+                const isAlyna = s.name.includes('ALYNA FATHIMA') && ['JUNE', 'JULY', 'AUG'].includes(selectedMonth);
+                const feeAmtLabel = isAlyna ? '₹250' : '₹350';
                 studentRowsHTML += `
                     <tr>
                         <td style="border: 1px solid #cbd5e1; padding: 5px; text-align: center;">${idx + 1}</td>
                         <td style="border: 1px solid #cbd5e1; padding: 5px;">${s.name}</td>
                         <td style="border: 1px solid #cbd5e1; padding: 5px; text-align: center;">${s.classStd}</td>
-                        <td style="border: 1px solid #cbd5e1; padding: 5px; text-align: center; font-weight: bold; color: ${isPaid ? '#059669' : '#dc2626'};">${isPaid ? 'PAID' : 'DUE'}</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 5px; text-align: center; font-weight: bold; color: ${isPaid ? '#059669' : '#dc2626'};">${isPaid ? 'PAID (' + feeAmtLabel + ')' : 'DUE'}</td>
                     </tr>
                 `;
             });
@@ -1437,8 +1453,8 @@
                     
                     <div class="bg-white p-3 rounded-xl border space-y-1">
                         <p class="font-bold text-slate-700">1. FEE COLLECTION SUMMARY</p>
-                        <p>• Students Paid: <b>${feeCollectedCount}</b> (₹${totalFeeCollectedAmount.toLocaleString('en-IN')})</p>
-                        <p>• Students Pending: <b>${feePendingCount}</b> (Est. ₹${totalFeePendingAmount.toLocaleString('en-IN')})</p>
+                        <p>• Students Paid: <b>${feeCollectedCount}</b></p>
+                        <p>• Students Pending: <b>${feePendingCount}</b></p>
                     </div>
 
                     ${selectedClass === 'ALL' ? `
@@ -1450,11 +1466,6 @@
                         <p>• Service & Repairs: ₹${serviceExp.toLocaleString('en-IN')}</p>
                         <p>• Other Expenses: ₹${otherExp.toLocaleString('en-IN')}</p>
                         <p class="font-bold text-orange-600 pt-1 border-t">Total Expenses: ₹${totalExpenses.toLocaleString('en-IN')}</p>
-                    </div>
-
-                    <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-200 font-bold text-indigo-900 flex justify-between">
-                        <span>NET BALANCE:</span>
-                        <span class="${netBalance >= 0 ? 'text-emerald-600' : 'text-red-600'}">₹${netBalance.toLocaleString('en-IN')}</span>
                     </div>` : ''}
 
                     <div class="bg-white p-3 rounded-xl border space-y-2">
