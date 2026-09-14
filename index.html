@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Bus & Tuition Fee App - GLPS MUNDEKARAD</title>
+    <title>School Bus App - GLPS MUNDEKARAD</title>
     
     <!-- PWA Web App Manifest & iOS Meta Tags -->
-    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22School%20Bus%20App%20GLPS%20Mundekarad%22%2C%22short_name%22%3A%22BusApp%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f172a%22%2C%22theme_color%22%3A%22%234f46e5%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fapi.iconify.design%2Ffa6-solid%3Abus.svg%3Fcolor%3D%23ffffff%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%5D%7D">
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22School%20Bus%20App%20GLPS%20Mundekarad%22%2C%22short_name%22%3A%22BusApp%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f172a%22%2C%22theme_color%22%3A%22%234f46e5%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fapi.iconify.design%2Ffa6-solid%3Abus.svg%3Fcolor%3D%23ffffff%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Fxml%22%5D%7D">
     <meta name="theme-color" content="#4f46e5">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -25,20 +25,20 @@
         body { font-family: 'Inter', sans-serif; }
         .brand-title { font-family: 'Outfit', sans-serif; }
         
-        /* Medium 3D Square Curved Colorful Buttons */
+        /* Optimized Medium-Large 3D Square Curved Colorful Buttons */
         .btn-3d-square {
             aspect-ratio: 1 / 1;
             width: 100%;
-            max-width: 88px;
+            max-width: 120px;
             margin: 0 auto;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.2), 0 2px 3px -2px rgba(0, 0, 0, 0.1);
-            border-bottom-width: 4px;
+            box-shadow: 0 6px 16px -2px rgba(0, 0, 0, 0.3), 0 3px 6px -2px rgba(0, 0, 0, 0.2);
+            border-bottom-width: 6px;
         }
         .btn-3d-square:active {
             transform: translateY(2px);
-            box-shadow: 0 2px 3px -1px rgba(0, 0, 0, 0.15);
-            border-bottom-width: 2px;
+            box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.25);
+            border-bottom-width: 3px;
         }
     </style>
 </head>
@@ -64,7 +64,6 @@
         </div>
     </header>
 
-    <!-- iOS Install Banner -->
     <div id="ios-install-banner" class="hidden bg-indigo-600 text-white px-4 py-3 shadow-md relative z-40 text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-between gap-2 border-b border-indigo-500">
         <div class="flex items-center space-x-2 text-center sm:text-left">
             <i class="fa-solid fa-mobile-screen-button text-lg text-amber-300"></i>
@@ -194,70 +193,15 @@
         </div>
 
         <!-- Admin Dashboard -->
-        <div id="admin-dashboard" class="hidden space-y-6 max-w-5xl mx-auto py-4">
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 text-center">
+        <div id="admin-dashboard" class="hidden space-y-6 max-w-xl mx-auto py-4">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 text-center">
                 <h2 id="dashboard-title" class="brand-title text-2xl font-extrabold text-slate-800">Control Center</h2>
                 <p class="text-sm text-slate-500 mt-1">GLPS MUNDEKARAD School Bus & Tuition Fee Operations</p>
             </div>
 
-            <!-- Medium 3D Square Curved Colorful Buttons Grid -->
-            <div id="admin-buttons-grid" class="grid grid-cols-2 sm:grid-cols-6 gap-3 px-2 py-4 justify-items-center">
-                
-                <!-- Button 1: Bus Fee Management -->
-                <button onclick="openBusFeeModal()" class="btn-3d-square bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-teal-900 group hover:scale-[1.03]">
-                    <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                        <i class="fa-solid fa-bus text-sm"></i>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="brand-title text-[9px] font-bold tracking-wide">Bus Fee Mgmt</h3>
-                        <p class="text-[6px] text-emerald-100 mt-0.5 font-medium">Bus fee & receipts</p>
-                    </div>
-                </button>
-
-                <!-- Button 2: Tuition Fee Management (LKG & UKG) -->
-                <button id="btn-tuition-fee" onclick="openTuitionFeeModal()" class="btn-3d-square bg-gradient-to-br from-violet-600 to-pink-700 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-pink-950 group hover:scale-[1.03]">
-                    <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                        <i class="fa-solid fa-graduation-cap text-sm"></i>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="brand-title text-[9px] font-bold tracking-wide">Tuition Fee Mgmt</h3>
-                        <p class="text-[6px] text-violet-100 mt-0.5 font-medium">LKG & UKG tuition</p>
-                    </div>
-                </button>
-
-                <!-- Button 3: Bus Expense Management -->
-                <button id="btn-expense" onclick="openBusExpenseModal()" class="btn-3d-square bg-gradient-to-br from-amber-500 to-orange-700 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-orange-900 group hover:scale-[1.03]">
-                    <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                        <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="brand-title text-[9px] font-bold tracking-wide">Bus Expense</h3>
-                        <p class="text-[6px] text-amber-100 mt-0.5 font-medium">Salary & diesel</p>
-                    </div>
-                </button>
-
-                <!-- Button 4: Bus Report -->
-                <button id="btn-report" onclick="openMonthlyReportModal()" class="btn-3d-square bg-gradient-to-br from-indigo-600 to-purple-800 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-purple-950 group hover:scale-[1.03]">
-                    <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                        <i class="fa-solid fa-chart-pie text-sm"></i>
-                    </div>
-                    <div class="text-center">
-                        <h3 id="btn-report-title" class="brand-title text-[9px] font-bold tracking-wide">Bus Report</h3>
-                        <p id="btn-report-desc" class="text-[6px] text-indigo-100 mt-0.5 font-medium">Collections & grid</p>
-                    </div>
-                </button>
-
-                <!-- Button 5: Tuition Report -->
-                <button id="btn-tuition-report" onclick="openTuitionReportModal()" class="btn-3d-square bg-gradient-to-br from-cyan-600 to-teal-800 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-teal-950 group hover:scale-[1.03]">
-                    <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                        <i class="fa-solid fa-file-invoice text-sm"></i>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="brand-title text-[9px] font-bold tracking-wide">Tuition Report</h3>
-                        <p class="text-[6px] text-cyan-100 mt-0.5 font-medium">Teacher salary & grid</p>
-                    </div>
-                </button>
-
+            <!-- Perfectly Aligned Medium-Large 3D Square Buttons: Row 1 (2), Row 2 (2), Row 3 (1 centered) -->
+            <div id="admin-buttons-grid" class="flex flex-col items-center gap-5 px-2 py-4">
+                <!-- Dynamically populated based on role -->
             </div>
         </div>
 
@@ -388,7 +332,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-500 mb-1">Select Months to Pay (June-Aug pre-paid & locked)</label>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Select Months to Pay</label>
                     <div id="months-checkboxes" class="grid grid-cols-3 sm:grid-cols-5 gap-2 text-xs">
                         <!-- Populated -->
                     </div>
@@ -498,7 +442,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-500 mb-1">Select Months to Pay (June-Aug pre-paid & locked)</label>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Select Months to Pay</label>
                     <div id="tuition-months-checkboxes" class="grid grid-cols-3 sm:grid-cols-5 gap-2 text-xs">
                         <!-- Populated -->
                     </div>
@@ -831,7 +775,7 @@
             { id: 308, name: 'FATHIMA HIBA', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 309, name: 'MUHAMMED RIZWAN AR', classStd: 'STANDARD-1', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
 
-            // STANDARD-2 (Updated exact list from PDF, Alyna special 250)
+            // STANDARD-2 (Updated exact list from PDF)
             { id: 401, name: 'MUHAMMAD RIZWAN', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 402, name: 'ARYANANDA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 403, name: 'FATHIMA MUFEEDHA', classStd: 'STANDARD-2', phone: '', paidMonths: ['JUNE', 'JULY', 'AUG'] },
@@ -894,18 +838,18 @@
             // UKG (15 students) - Teacher: Naseera K (Hashir CM absent June, July)
             { id: 801, name: 'HENZA FATHIMA V', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 802, name: 'SAINABA NUHA', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 803, name: 'ADHIJITH SM', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 803, name: 'ADHIJITJSM', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 804, name: 'AYSHA NOURIN V', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 805, name: 'FATHIMA RIFA P', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 806, name: 'HAMBALA BATHOOL N', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 807, name: 'MUHAMMED ESHAAN N', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 807, name: 'MUHAMMED ESHAAN. N', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 808, name: 'MUHAMMED HAMDHAN K P', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 809, name: 'MUHAMMED HASHIR C K', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 810, name: 'MUHAMMED RAZAN C', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 811, name: 'MUHAMMED RIZAN C', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 812, name: 'RAJIH ALI', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 813, name: 'SIYA MEHREEN K', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
-            { id: 814, name: 'RUDRA V D K', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 812, name: 'RAJIHALI', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 813, name: 'SIYA MEHREE K', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
+            { id: 814, name: 'RUDRAV DK', classStd: 'UKG', phone: '', tuitionPaidMonths: ['JUNE', 'JULY', 'AUG'] },
             { id: 815, name: 'MUHAMMED HASHIR C M', classStd: 'UKG', phone: '', tuitionPaidMonths: ['AUG'] }
         ];
 
@@ -1178,128 +1122,138 @@
                     if (dashboardTitle) dashboardTitle.innerText = `${currentUser.classStd} Teacher Control Center`;
                     
                     if (['LKG', 'UKG'].includes(currentUser.classStd)) {
-                        // LKG & UKG Teachers get: Bus Fee, Tuition Fee, Bus Report, Tuition Report (4 buttons)
+                        // LKG & UKG Teachers get: Bus Fee, Tuition Fee, Bus Report, Tuition Report
                         grid.innerHTML = `
-                            <button onclick="openBusFeeModal()" class="btn-3d-square bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-teal-900 group hover:scale-[1.03]">
-                                <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                                    <i class="fa-solid fa-bus text-sm"></i>
-                                </div>
-                                <div class="text-center">
-                                    <h3 class="brand-title text-[9px] font-bold tracking-wide">Bus Fee Mgmt</h3>
-                                    <p class="text-[6px] text-emerald-100 mt-0.5 font-medium">Bus fee & receipts</p>
-                                </div>
-                            </button>
+                            <div class="grid grid-cols-2 gap-4 w-full max-w-sm justify-items-center">
+                                <button onclick="openBusFeeModal()" class="btn-3d-square bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-2.5 rounded-3xl flex flex-col items-center justify-center space-y-1.5 border-teal-950 group hover:scale-[1.03]">
+                                    <div class="bg-white/20 p-3 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
+                                        <i class="fa-solid fa-bus text-lg"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <h3 class="brand-title text-xs font-bold tracking-wide">Bus Fee</h3>
+                                        <p class="text-[8px] text-emerald-100 mt-0.5 font-medium">Bus fee & receipts</p>
+                                    </div>
+                                </button>
 
-                            <button onclick="openTuitionFeeModal()" class="btn-3d-square bg-gradient-to-br from-violet-600 to-pink-700 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-pink-950 group hover:scale-[1.03]">
-                                <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                                    <i class="fa-solid fa-graduation-cap text-sm"></i>
-                                </div>
-                                <div class="text-center">
-                                    <h3 class="brand-title text-[9px] font-bold tracking-wide">Tuition Fee Mgmt</h3>
-                                    <p class="text-[6px] text-violet-100 mt-0.5 font-medium">LKG & UKG tuition</p>
-                                </div>
-                            </button>
+                                <button onclick="openTuitionFeeModal()" class="btn-3d-square bg-gradient-to-br from-violet-600 to-pink-700 text-white p-2.5 rounded-3xl flex flex-col items-center justify-center space-y-1.5 border-pink-950 group hover:scale-[1.03]">
+                                    <div class="bg-white/20 p-3 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
+                                        <i class="fa-solid fa-graduation-cap text-lg"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <h3 class="brand-title text-xs font-bold tracking-wide">Tuition Fee</h3>
+                                        <p class="text-[8px] text-violet-100 mt-0.5 font-medium">LKG & UKG tuition</p>
+                                    </div>
+                                </button>
+                            </div>
 
-                            <button onclick="openMonthlyReportModal()" class="btn-3d-square bg-gradient-to-br from-indigo-600 to-purple-800 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-purple-950 group hover:scale-[1.03]">
-                                <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                                    <i class="fa-solid fa-chart-pie text-sm"></i>
-                                </div>
-                                <div class="text-center">
-                                    <h3 class="brand-title text-[9px] font-bold tracking-wide">Bus Fee Report</h3>
-                                    <p class="text-[6px] text-indigo-100 mt-0.5 font-medium">Bus grid report</p>
-                                </div>
-                            </button>
+                            <div class="grid grid-cols-2 gap-4 w-full max-w-sm justify-items-center">
+                                <button onclick="openMonthlyReportModal()" class="btn-3d-square bg-gradient-to-br from-indigo-600 to-purple-800 text-white p-2.5 rounded-3xl flex flex-col items-center justify-center space-y-1.5 border-purple-950 group hover:scale-[1.03]">
+                                    <div class="bg-white/20 p-3 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
+                                        <i class="fa-solid fa-chart-pie text-lg"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <h3 class="brand-title text-xs font-bold tracking-wide">Bus Report</h3>
+                                        <p class="text-[8px] text-indigo-100 mt-0.5 font-medium">Bus grid report</p>
+                                    </div>
+                                </button>
 
-                            <button onclick="openTuitionReportModal()" class="btn-3d-square bg-gradient-to-br from-cyan-600 to-teal-800 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-teal-950 group hover:scale-[1.03]">
-                                <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                                    <i class="fa-solid fa-file-invoice text-sm"></i>
-                                </div>
-                                <div class="text-center">
-                                    <h3 class="brand-title text-[9px] font-bold tracking-wide">Tuition Report</h3>
-                                    <p class="text-[6px] text-cyan-100 mt-0.5 font-medium">Tuition grid report</p>
-                                </div>
-                            </button>
+                                <button onclick="openTuitionReportModal()" class="btn-3d-square bg-gradient-to-br from-cyan-600 to-teal-800 text-white p-2.5 rounded-3xl flex flex-col items-center justify-center space-y-1.5 border-teal-950 group hover:scale-[1.03]">
+                                    <div class="bg-white/20 p-3 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
+                                        <i class="fa-solid fa-file-invoice text-lg"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <h3 class="brand-title text-xs font-bold tracking-wide">Tuition Report</h3>
+                                        <p class="text-[8px] text-cyan-100 mt-0.5 font-medium">Tuition grid report</p>
+                                    </div>
+                                </button>
+                            </div>
                         `;
-                        grid.className = "grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-lg mx-auto px-2 py-4 justify-items-center";
                     } else {
-                        // Std 1-4 Teachers get Bus Fee & Bus Report (2 buttons)
+                        // Std 1-4 Teachers get Bus Fee & Bus Report
                         grid.innerHTML = `
-                            <button onclick="openBusFeeModal()" class="btn-3d-square bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-teal-900 group hover:scale-[1.03]">
-                                <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                                    <i class="fa-solid fa-bus text-sm"></i>
-                                </div>
-                                <div class="text-center">
-                                    <h3 class="brand-title text-[9px] font-bold tracking-wide">Bus Fee Mgmt</h3>
-                                    <p class="text-[6px] text-emerald-100 mt-0.5 font-medium">Bus fee & receipts</p>
-                                </div>
-                            </button>
+                            <div class="grid grid-cols-2 gap-4 w-full max-w-sm justify-items-center">
+                                <button onclick="openBusFeeModal()" class="btn-3d-square bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-2.5 rounded-3xl flex flex-col items-center justify-center space-y-1.5 border-teal-950 group hover:scale-[1.03]">
+                                    <div class="bg-white/20 p-3 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
+                                        <i class="fa-solid fa-bus text-lg"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <h3 class="brand-title text-xs font-bold tracking-wide">Bus Fee</h3>
+                                        <p class="text-[8px] text-emerald-100 mt-0.5 font-medium">Bus fee & receipts</p>
+                                    </div>
+                                </button>
 
-                            <button onclick="openMonthlyReportModal()" class="btn-3d-square bg-gradient-to-br from-indigo-600 to-purple-800 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-purple-950 group hover:scale-[1.03]">
-                                <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                                    <i class="fa-solid fa-chart-pie text-sm"></i>
-                                </div>
-                                <div class="text-center">
-                                    <h3 class="brand-title text-[9px] font-bold tracking-wide">Bus Fee Report</h3>
-                                    <p class="text-[6px] text-indigo-100 mt-0.5 font-medium">Bus grid report</p>
-                                </div>
-                            </button>
+                                <button onclick="openMonthlyReportModal()" class="btn-3d-square bg-gradient-to-br from-indigo-600 to-purple-800 text-white p-2.5 rounded-3xl flex flex-col items-center justify-center space-y-1.5 border-purple-950 group hover:scale-[1.03]">
+                                    <div class="bg-white/20 p-3 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
+                                        <i class="fa-solid fa-chart-pie text-lg"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <h3 class="brand-title text-xs font-bold tracking-wide">Bus Report</h3>
+                                        <p class="text-[8px] text-indigo-100 mt-0.5 font-medium">Bus grid report</p>
+                                    </div>
+                                </button>
+                            </div>
                         `;
-                        grid.className = "grid grid-cols-2 gap-3 max-w-xs mx-auto px-2 py-4 justify-items-center";
                     }
                 } else {
                     if (dashboardTitle) dashboardTitle.innerText = "Admin Control Center";
+                    // Admin gets all 7 buttons: Row 1 (2), Row 2 (2), Row 3 (2), Row 4 (1 centered)
                     grid.innerHTML = `
-                        <button onclick="openBusFeeModal()" class="btn-3d-square bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-teal-900 group hover:scale-[1.03]">
-                            <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                                <i class="fa-solid fa-bus text-sm"></i>
-                            </div>
-                            <div class="text-center">
-                                <h3 class="brand-title text-[9px] font-bold tracking-wide">Bus Fee Mgmt</h3>
-                                <p class="text-[6px] text-emerald-100 mt-0.5 font-medium">Bus fee & receipts</p>
-                            </div>
-                        </button>
+                        <div class="grid grid-cols-2 gap-4 w-full max-w-sm justify-items-center">
+                            <button onclick="openBusFeeModal()" class="btn-3d-square bg-gradient-to-br from-emerald-500 to-teal-700 text-white p-2.5 rounded-3xl flex flex-col items-center justify-center space-y-1.5 border-teal-950 group hover:scale-[1.03]">
+                                <div class="bg-white/20 p-3 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
+                                    <i class="fa-solid fa-bus text-lg"></i>
+                                </div>
+                                <div class="text-center">
+                                    <h3 class="brand-title text-xs font-bold tracking-wide">Bus Fee</h3>
+                                    <p class="text-[8px] text-emerald-100 mt-0.5 font-medium">Bus fee & receipts</p>
+                                </div>
+                            </button>
 
-                        <button onclick="openTuitionFeeModal()" class="btn-3d-square bg-gradient-to-br from-violet-600 to-pink-700 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-pink-950 group hover:scale-[1.03]">
-                            <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                                <i class="fa-solid fa-graduation-cap text-sm"></i>
-                            </div>
-                            <div class="text-center">
-                                <h3 class="brand-title text-[9px] font-bold tracking-wide">Tuition Fee Mgmt</h3>
-                                <p class="text-[6px] text-violet-100 mt-0.5 font-medium">LKG & UKG tuition</p>
-                            </div>
-                        </button>
+                            <button onclick="openTuitionFeeModal()" class="btn-3d-square bg-gradient-to-br from-violet-600 to-pink-700 text-white p-2.5 rounded-3xl flex flex-col items-center justify-center space-y-1.5 border-pink-950 group hover:scale-[1.03]">
+                                <div class="bg-white/20 p-3 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
+                                    <i class="fa-solid fa-graduation-cap text-lg"></i>
+                                </div>
+                                <div class="text-center">
+                                    <h3 class="brand-title text-xs font-bold tracking-wide">Tuition Fee</h3>
+                                    <p class="text-[8px] text-violet-100 mt-0.5 font-medium">LKG & UKG tuition</p>
+                                </div>
+                            </button>
+                        </div>
 
-                        <button onclick="openBusExpenseModal()" class="btn-3d-square bg-gradient-to-br from-amber-500 to-orange-700 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-orange-900 group hover:scale-[1.03]">
-                            <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                                <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
-                            </div>
-                            <div class="text-center">
-                                <h3 class="brand-title text-[9px] font-bold tracking-wide">Bus Expense</h3>
-                                <p class="text-[6px] text-amber-100 mt-0.5 font-medium">Salary & diesel</p>
-                            </div>
-                        </button>
+                        <div class="grid grid-cols-2 gap-4 w-full max-w-sm justify-items-center">
+                            <button onclick="openBusExpenseModal()" class="btn-3d-square bg-gradient-to-br from-amber-500 to-orange-700 text-white p-2.5 rounded-3xl flex flex-col items-center justify-center space-y-1.5 border-orange-950 group hover:scale-[1.03]">
+                                <div class="bg-white/20 p-3 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
+                                    <i class="fa-solid fa-file-invoice-dollar text-lg"></i>
+                                </div>
+                                <div class="text-center">
+                                    <h3 class="brand-title text-xs font-bold tracking-wide">Bus Expense</h3>
+                                    <p class="text-[8px] text-amber-100 mt-0.5 font-medium">Salary & diesel</p>
+                                </div>
+                            </button>
 
-                        <button onclick="openMonthlyReportModal()" class="btn-3d-square bg-gradient-to-br from-indigo-600 to-purple-800 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-purple-950 group hover:scale-[1.03]">
-                            <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                                <i class="fa-solid fa-chart-pie text-sm"></i>
-                            </div>
-                            <div class="text-center">
-                                <h3 class="brand-title text-[9px] font-bold tracking-wide">Bus Report</h3>
-                                <p class="text-[6px] text-indigo-100 mt-0.5 font-medium">Collections & grid</p>
-                            </div>
-                        </button>
+                            <button onclick="openMonthlyReportModal()" class="btn-3d-square bg-gradient-to-br from-indigo-600 to-purple-800 text-white p-2.5 rounded-3xl flex flex-col items-center justify-center space-y-1.5 border-purple-950 group hover:scale-[1.03]">
+                                <div class="bg-white/20 p-3 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
+                                    <i class="fa-solid fa-chart-pie text-lg"></i>
+                                </div>
+                                <div class="text-center">
+                                    <h3 class="brand-title text-xs font-bold tracking-wide">Bus Report</h3>
+                                    <p class="text-[8px] text-indigo-100 mt-0.5 font-medium">Collections & grid</p>
+                                </div>
+                            </button>
+                        </div>
 
-                        <button onclick="openTuitionReportModal()" class="btn-3d-square bg-gradient-to-br from-cyan-600 to-teal-800 text-white p-1.5 rounded-3xl flex flex-col items-center justify-center space-y-1 border-teal-950 group hover:scale-[1.03]">
-                            <div class="bg-white/20 p-2 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
-                                <i class="fa-solid fa-file-invoice text-sm"></i>
-                            </div>
-                            <div class="text-center">
-                                <h3 class="brand-title text-[9px] font-bold tracking-wide">Tuition Report</h3>
-                                <p class="text-[6px] text-cyan-100 mt-0.5 font-medium">Teacher salary & grid</p>
-                            </div>
-                        </button>
+                        <div class="w-full flex justify-center">
+                            <button onclick="openTuitionReportModal()" class="btn-3d-square bg-gradient-to-br from-cyan-600 to-teal-800 text-white p-2.5 rounded-3xl flex flex-col items-center justify-center space-y-1.5 border-teal-950 group hover:scale-[1.03]">
+                                <div class="bg-white/20 p-3 rounded-2xl group-hover:bg-white/30 transition shadow-inner">
+                                    <i class="fa-solid fa-file-invoice text-lg"></i>
+                                </div>
+                                <div class="text-center">
+                                    <h3 class="brand-title text-xs font-bold tracking-wide">Tuition Report</h3>
+                                    <p class="text-[8px] text-cyan-100 mt-0.5 font-medium">Teacher salary & grid</p>
+                                </div>
+                            </button>
+                        </div>
                     `;
-                    grid.className = "grid grid-cols-2 sm:grid-cols-5 gap-3 max-w-4xl mx-auto px-2 py-4 justify-items-center";
                 }
             } else {
                 document.getElementById('parent-dashboard').classList.remove('hidden');
